@@ -17,13 +17,12 @@ window.askQuestion = async function () {
   answerDiv.innerText = "Thinking...";
   
   try {
-    // ✅ CHANGED: Now pointing to your Live Render API
-    const response = await fetch("https://ambedkar-api.onrender.com/ask",
-      {
+  
+    const response = await fetch("https://ambedkar-api.onrender.com/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question })
-      });
+    });
 
     const data = await response.json();
     answerDiv.innerText = data.answer || "No answer returned";
