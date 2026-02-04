@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.venv/
+
+# Environment secrets
+.env
+
+# Generated files
+prepared_chunks.json
+
+# ML model caches
+.cache/
+.cache/huggingface/
+.cache/torch/
+.cache/sentence_transformers/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Generated audio files
+Dr.Ambedkar-RAG/audio/
+
+env/
+audio/

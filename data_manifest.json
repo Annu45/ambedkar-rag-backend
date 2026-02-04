@@ -1,0 +1,825 @@
+{
+  "untouchability.txt":{
+    "author":"B. R. Ambedkar",
+    "year": "1936",
+    "category": "Scholarly Essay / Social Analysis"
+  },
+
+  "AnnihilationOfCaste1_reply.txt":{
+    "author":"B. R. Ambedkar",
+    "year": "1937",
+    "category": "Essay / Written Response"
+  },
+
+ "data2.txt":{
+    "author":"B. R. Ambedkar",
+    "year": "1937",
+    "category": "Essay / Written Response"
+  }
+,
+  "data3.txt":{
+    "author":"B. R. Ambedkar",
+    "year": "1937",
+    "category": "Essay / Written Response"
+  },
+ "data4.txt": {
+  "author": "B. R. Ambedkar",
+  "title": "Annihilation of Caste",
+  "section": "Preface to the Second Edition",
+  "type": "Political and Social Essay",
+  "category": "Preface / Editorial Context",
+  "source": "Dr. Babasaheb Ambedkar Writings and Speeches Vol. 1",
+  "year": "unknown"
+},
+"data5.txt": {
+  "author": "B. R. Ambedkar",
+  "title": "Annihilation of Caste",
+  "section": "Preface to the Third Edition",
+  "type": "Political and Social Essay",
+  "category": "Preface / Editorial Context",
+  "source": "Dr. Babasaheb Ambedkar Writings and Speeches Vol. 1",
+  "year": "1937"
+},
+"data6.txt": {
+  "author": "B. R. Ambedkar",
+  "title": "Annihilation of Caste",
+  "section": "Prologue",
+  "type": "Political and Social Essay",
+  "category": "Prologue / Publication Context",
+  "source": "Dr. Babasaheb Ambedkar Writings and Speeches Vol. 1",
+  "year": "1936"
+}
+,
+"data7.txt": {
+  "author": "B. R. Ambedkar",
+  "title": "Annihilation of Caste",
+  "section": "Prologue",
+  "type": "Political and Social Essay",
+  "category": "Prologue / Correspondence and Publication Context",
+  "source": "Dr. Babasaheb Ambedkar Writings and Speeches Vol. 1",
+  "year": "1936"
+}
+
+,
+"data8.txt": {
+  "author": "B. R. Ambedkar",
+  "title": "Annihilation of Caste",
+  "section": "Speech (Prepared but Not Delivered)",
+  "type": "Political and Social Essay",
+  "category": "Core Argument / Social and Political Critique",
+  "source": "Dr. Babasaheb Ambedkar Writings and Speeches Vol. 1",
+  "year": "1936"
+}
+,
+"data9.txt":{
+  "author": "B. R. Ambedkar",
+  "title": "Annihilation of Caste",
+  "year": "1936",
+  "section": "Speech (Prepared but Not Delivered)",
+  "subsection": "Critique of Socialism, Religion, and Caste",
+  "type": "Political and Social Essay",
+  "category": "Core Argument / Economic vs Social Reform",
+  "themes": [
+    "Critique of Socialism",
+    "Religion as Power",
+    "Caste as Social Obstacle",
+    "Limits of Economic Reform",
+    "Division of Labour vs Division of Labourers"
+  ],
+  "source": "Dr. Babasaheb Ambedkar Writings and Speeches Vol. 1"
+}
+,
+"data10.txt":{
+  "author": "B. R. Ambedkar",
+  "title": "Annihilation of Caste",
+  "year": "1936",
+  "section": "Speech (Prepared but Not Delivered)",
+  "subsection": "Biological, Racial, and Sociological Critique of Caste",
+  "type": "Political and Social Essay",
+  "category": "Core Argument / Anti-Caste Theory",
+  "themes": [
+    "Caste vs Race",
+    "Critique of Eugenics",
+    "Myth of Hindu Society",
+    "Caste Consciousness",
+    "Anti-social Nature of Caste",
+    "Absence of National Unity",
+    "Communication as Basis of Society",
+    "Caste and Tribal Exclusion"
+  ],
+  "source": "Dr. Babasaheb Ambedkar Writings and Speeches Vol. 1"
+},
+"data11.txt":{
+  "author": "B. R. Ambedkar",
+  "title": "Annihilation of Caste",
+  "year": "1936",
+  "section": "Speech (Prepared but Not Delivered)",
+  "subsection": "Caste as an Obstacle to Reform, Solidarity, and Moral Life",
+  "type": "Political and Social Essay",
+  "category": "Core Argument / Ethics, Reform, and Social Solidarity",
+  "themes": [
+    "Suppression of Social Mobility",
+    "Anti-reform Nature of Caste",
+    "Caste and Missionary Failure",
+    "Impossibility of Shuddhi and Sanghatan",
+    "Lack of Social Solidarity",
+    "Caste and Hindu Weakness",
+    "Excommunication as Social Death",
+    "Caste and Moral Degradation",
+    "Destruction of Public Spirit",
+    "Caste-bound Morality"
+  ],
+  "source": "Dr. Babasaheb Ambedkar Writings and Speeches Vol. 1"
+}
+,
+"data12.txt":{
+  "author": "B. R. Ambedkar",
+  "title": "Annihilation of Caste",
+  "year": "1936",
+  "section": "Speech (Prepared but Not Delivered)",
+  "subsection": "Ideal Society and Critique of Chaturvarnya",
+  "type": "Political and Social Essay",
+  "category": "Core Argument / Social Philosophy",
+  "themes": [
+    "Liberty",
+    "Equality",
+    "Fraternity",
+    "Democracy as social life",
+    "Critique of Chaturvarnya",
+    "Caste and Slavery",
+    "Social Mobility",
+    "Denial of Education and Arms",
+    "Failure of Varna System"
+  ],
+  "source": "Dr. Babasaheb Ambedkar Writings and Speeches Vol. 1"
+}
+,
+"data13.txt":{
+  "author": "B. R. Ambedkar",
+  "title": "Annihilation of Caste",
+  "section": "Speech (Prepared but Not Delivered)",
+  "type": "Political and Social Essay",
+  "category": "Critique of Chaturvarnya and Religious Basis of Caste",
+  "themes": [
+    "Failure of Chaturvarnya",
+    "Brahmin–Kshatriya conflict",
+    "Caste vs Varna",
+    "Caste among Hindus vs Non-Hindus",
+    "Social cohesion and nationhood",
+    "Inter-caste marriage as remedy",
+    "Religion as foundation of caste",
+    "Critique of Shastras",
+    "Social reform vs ritual reform"
+  ],
+  "source": "Dr. Babasaheb Ambedkar Writings and Speeches Vol. 1",
+  "year": "1936"
+},
+"data14.txt":{
+  "author": "B. R. Ambedkar",
+  "title": "Annihilation of Caste",
+  "section": "Speech (Prepared but Not Delivered)",
+  "type": "Political and Social Essay",
+  "category": "Limits of Social Reform and Critique of Religious Authority",
+  "themes": [
+    "Impossibility of caste reform within Hindu orthodoxy",
+    "Religious sanction of caste",
+    "Authority of Shastras and Vedas",
+    "Brahmins as intellectual class",
+    "Graded hierarchy of castes",
+    "Limits of reason and morality in Hindu society",
+    "Prayaschitta and perpetuation of caste",
+    "Critique of Hindu religion as rule-based law",
+    "Religion of principles vs religion of rules",
+    "Destruction of Brahminism",
+    "Democratization of priesthood",
+    "Liberty, Equality, Fraternity as religious foundation"
+  ],
+  "source": "Dr. Babasaheb Ambedkar Writings and Speeches Vol. 1",
+  "year": "1936"
+}
+,
+"data15.txt":{
+  "author": "B. R. Ambedkar",
+  "title": "Annihilation of Caste",
+  "section": "Conclusion / Final Address to Hindu Audience",
+  "type": "Political and Social Essay",
+  "category": "Conclusion and Moral Appeal",
+  "themes": [
+    "Survival value of morality and religion",
+    "Critique of unworkable moral systems",
+    "Need for selective social inheritance",
+    "Rejection of blind worship of the past",
+    "Change as the law of life",
+    "Responsibility of Hindus for caste reform",
+    "Caste as obstacle to national strength",
+    "Social reform more important than Swaraj",
+    "Casteless society as condition for freedom",
+    "Ambedkar’s personal withdrawal from Hindu fold",
+    "Final appeal for annihilation of caste"
+  ],
+  "source": "Dr. Babasaheb Ambedkar Writings and Speeches Vol. 1",
+  "year": "1936"
+}
+,"data16.txt": {
+  "author": "B. R. Ambedkar",
+  "title": "Buddha or Karl Marx",
+  "year": 1956,
+  "source": "Dr. Babasaheb Ambedkar: Writings and Speeches, Vol. 3",
+  "type": "Philosophical Treatise / Comparative Ideological Analysis",
+  "section": "Comparative Analysis of Buddhism and Marxism",
+  "category": "Political Philosophy / Social Ethics",
+  "themes": [
+    "Buddha vs Karl Marx",
+    "Religion and Social Reconstruction",
+    "Critique of Scientific Socialism",
+    "Class Conflict",
+    "Private Property and Exploitation",
+    "Moral Foundations of Society",
+    "Violence vs Moral Transformation",
+    "Ends vs Means in Social Change",
+    "Ahimsa vs Revolutionary Violence",
+    "Ashtanga Marga",
+    "Panch Sila",
+    "Nibbana and Moral Discipline",
+    "Paramitas",
+    "Dictatorship of the Proletariat",
+    "Reconstruction of Society",
+    "Human Equality",
+    "Ethics as Law of Life"
+  ],
+  "abstract": "A comparative philosophical analysis in which Ambedkar evaluates the ideological foundations, aims, and methods of Buddhism and Marxism. While recognizing common goals such as the elimination of suffering and exploitation, Ambedkar contrasts the Buddha’s ethical, non-violent, and moral method of social reconstruction with Marxism’s reliance on violence and proletarian dictatorship. The essay argues for moral transformation as the superior means of achieving social justice."
+}
+,"data17.txt": {
+  "author": "B. R. Ambedkar",
+  "title": "Buddha or Karl Marx",
+  "year": 1956,
+  "source": "Dr. Babasaheb Ambedkar: Writings and Speeches, Vol. 3",
+  "type": "Philosophical Treatise / Comparative Ideological Analysis",
+  "section": "Evaluation of Means: Violence, Dictatorship, and Moral Force",
+  "category": "Political Philosophy / Ethics of Social Change",
+  "themes": [
+    "Ends vs Means",
+    "Violence and Justice",
+    "Ahimsa and Use of Force",
+    "Buddha’s Conditional View of Violence",
+    "Critique of Revolutionary Violence",
+    "Private Property and Moral Justification",
+    "Dictatorship vs Democracy",
+    "Liberty and Right to Criticise",
+    "Parliamentary Government vs Dictatorship",
+    "Government by Force vs Government by Moral Disposition",
+    "Moral Force as Lasting Social Foundation",
+    "Buddha as Democrat and Egalitarian",
+    "Bhikkhu Sangha and Democratic Governance",
+    "Rule by Righteousness vs Rule by Law",
+    "Failure of Coercive Power",
+    "Ethical Decline from Poverty and Injustice",
+    "Moral Causation in Social Breakdown",
+    "Kingdom of Righteousness"
+  ],
+  "abstract": "This section evaluates the means employed by Buddhism and Communism in achieving social transformation. Ambedkar argues that while both traditions seek the removal of suffering and exploitation, their methods fundamentally diverge. Communism relies on violence and dictatorship, which destroy liberty and moral ends in the process of reform. Buddhism, by contrast, emphasizes moral force, justice, and democratic principles. Drawing on Buddhist dialogues and parables, Ambedkar demonstrates that durable social order cannot be sustained through coercion, but only through ethical training and voluntary moral discipline."
+}
+,"data18.txt": {
+  "author": "B. R. Ambedkar",
+  "title": "Buddha or Karl Marx",
+  "year": 1956,
+  "source": "Dr. Babasaheb Ambedkar: Writings and Speeches, Vol. 3",
+  "type": "Philosophical Treatise / Comparative Ideological Analysis",
+  "section": "Critique of Permanent Dictatorship and the Withering of the State",
+  "category": "Political Philosophy / State, Religion, and Social Sustainability",
+  "themes": [
+    "Withering Away of the State",
+    "Limits of Communist Dictatorship",
+    "Temporary vs Permanent Dictatorship",
+    "Ashoka as Moral Precedent",
+    "Force vs Moral Cohesion",
+    "Role of Religion in Sustaining Society",
+    "Critique of Anti-Religious Communism",
+    "Religion as Moral Foundation (not Opium)",
+    "Buddhism vs Christianity",
+    "Wealth Acquisition in Buddhism",
+    "Householder Ethics",
+    "Dhamma as Moral Training",
+    "Communism without Dictatorship (Sangha)",
+    "Voluntary Social Discipline",
+    "Economic Values vs Spiritual Values",
+    "Liberty, Equality, Fraternity",
+    "Limits of Economic Equality Alone",
+    "Buddhism as Synthesis of Liberty, Equality, Fraternity"
+  ],
+  "abstract": "In this section, Ambedkar critically examines the Communist claim that the State will eventually wither away under permanent dictatorship. He argues that coercion cannot sustain a social order once force is withdrawn and that moral and spiritual foundations are indispensable for long-term stability. Contrasting Communist hostility to religion with Buddhism’s ethical and worldly orientation, Ambedkar shows how the Buddha reconciled material prosperity with moral discipline. He concludes that while Communism may achieve equality, only the Buddhist path can harmonize equality with liberty and fraternity, making social reconstruction durable and humane."
+}
+,"data19.txt": {
+  "author": "B. R. Ambedkar",
+  "title": "Castes in India: Their Mechanism, Genesis and Development",
+  "year": 1916,
+  "source": "Dr. Babasaheb Ambedkar: Writings and Speeches, Vol. 1",
+  "type": "Academic Paper",
+  "context": "Anthropological and Sociological Analysis of the Caste System",
+  "section": "Introduction and Conceptual Framework",
+  "category": "Sociology / Anthropology / Social Theory",
+  "themes": [
+    "Caste System in India",
+    "Genesis of Caste",
+    "Mechanism of Caste Formation",
+    "Development and Spread of Caste",
+    "Caste as a Social Institution",
+    "Ethnological Method",
+    "Cultural Unity of India",
+    "Race vs Culture",
+    "Critique of Racial Explanations of Caste",
+    "Endogamy as Core Mechanism",
+    "Homogeneity and Social Parcelling",
+    "Definitions of Caste",
+    "Critique of Existing Caste Theories",
+    "Caste and Social Closure",
+    "Marriage Restrictions",
+    "Food and Social Interaction",
+    "Religious Elements of Caste",
+    "Pollution Theory Critique"
+  ],
+  "abstract": "This early academic paper presents Ambedkar’s foundational analysis of the Indian caste system using an ethnological and sociological framework. Rejecting racial and purely religious explanations, Ambedkar argues that caste represents the parcelling of an originally homogeneous society. Through a critical review of prevailing definitions of caste, he demonstrates that endogamy—rather than occupation, race, or ritual purity—is the central mechanism governing caste formation, persistence, and expansion."
+}
+,"data20.txt": {
+  "author": "B. R. Ambedkar",
+  "title": "Castes in India: Their Mechanism, Genesis and Development",
+  "year": 1916,
+  "source": "Dr. Babasaheb Ambedkar: Writings and Speeches, Vol. 1",
+  "type": "Academic Paper",
+  "context": "Anthropological and Sociological Analysis of the Caste System",
+  "section": "Endogamy as the Essence and Mechanism of Caste",
+  "category": "Sociology / Anthropology / Social Institutions",
+  "themes": [
+    "Endogamy as Essence of Caste",
+    "Critique of Existing Definitions of Caste",
+    "Caste as a System, Not an Isolated Unit",
+    "Effect vs Cause in Caste Practices",
+    "Social Exclusiveness",
+    "Homogeneity of Indian Society",
+    "Artificial Social Segmentation",
+    "Caste vs Tribe",
+    "Exogamy in Primitive Society",
+    "Superposition of Endogamy on Exogamy",
+    "Genesis of Caste in India",
+    "Mechanism of Caste Formation",
+    "Marriage Regulation",
+    "Maintenance of Endogamy",
+    "Sex Ratio and Marriageable Units",
+    "Surplus Man and Surplus Woman",
+    "Threat of Intermarriage",
+    "Control of Conjugal Rights",
+    "Preservation of Caste Boundaries"
+  ],
+  "abstract": "In this section, Ambedkar advances his central thesis that endogamy is the defining essence of caste in India. Rejecting occupation, ritual purity, and food restrictions as secondary effects, he argues that caste arises from the deliberate superposition of endogamy upon an originally exogamous and culturally homogeneous society. Ambedkar then identifies the core practical problem of caste maintenance—the regulation of marriageable units—and shows how surplus men and women pose a structural threat to caste continuity. This analysis lays the groundwork for explaining the social controls developed to preserve caste boundaries."
+}
+,"data21.txt": {
+  "author": "B. R. Ambedkar",
+  "title": "Castes in India: Their Mechanism, Genesis and Development",
+  "year": 1916,
+  "source": "Dr. Babasaheb Ambedkar: Writings and Speeches, Vol. 1",
+  "type": "Academic Paper",
+  "context": "Anthropological and Sociological Analysis of the Caste System",
+  "section": "Control of Surplus Men and Women: Social Mechanisms Preserving Endogamy",
+  "category": "Sociology / Anthropology / Gender and Social Institutions",
+  "themes": [
+    "Endogamy Maintenance",
+    "Surplus Woman (Widow)",
+    "Surplus Man (Widower)",
+    "Sex Ratio Regulation",
+    "Sati (Widow Burning)",
+    "Compulsory Widowhood",
+    "Celibacy of Widower",
+    "Child Marriage",
+    "Marriage as Social Control",
+    "Gendered Social Sanctions",
+    "Caste Morality and Sexual Regulation",
+    "Preservation of Caste Boundaries",
+    "Grahastha Ideal",
+    "Asceticism vs Social Continuity",
+    "Caste as Reproductive System",
+    "Customs as Institutional Fossils",
+    "Religious Rationalization of Social Practices"
+  ],
+  "abstract": "In this section, Ambedkar completes his scientific explanation of caste by identifying the concrete social mechanisms devised to preserve endogamy. He shows how surplus women and surplus men threaten caste continuity and how Hindu society developed gendered solutions—Sati, enforced widowhood, celibacy, and child marriage—to regulate marriageable units. Ambedkar argues that these practices were not moral ideals but functional instruments for maintaining caste boundaries. Customs long justified through religious philosophy are thus revealed as structural devices essential to the survival of the caste system."
+}
+,"data22.txt": {
+  "author": "B. R. Ambedkar",
+  "title": "Castes in India: Their Mechanism, Genesis and Development",
+  "year": 1916,
+  "source": "Dr. Babasaheb Ambedkar: Writings and Speeches, Vol. 1",
+  "type": "Academic Paper",
+  "context": "Anthropological and Sociological Analysis of the Caste System",
+  "section": "Genesis and Spread of Caste: Enclosed Class and Social Imitation",
+  "category": "Sociology / Anthropology / Social Stratification",
+  "themes": [
+    "Means vs Ideals in Social Institutions",
+    "Functional Origin of Social Customs",
+    "Endogamy as Defining Feature of Caste",
+    "Caste as Enclosed Class",
+    "Origin of Caste Mechanism",
+    "Class Precedes Caste",
+    "Brahmin Class as First Enclosed Group",
+    "Derivative Adoption by Non-Brahmin Castes",
+    "Critique of Divine or Scriptural Origin of Caste",
+    "Rejection of Manu as Law-Giver of Caste",
+    "Codification vs Creation of Caste",
+    "Limits of Great-Man Theory",
+    "Critique of Shastric Explanation",
+    "Spread of Caste by Imitation",
+    "Occupational and Tribal Theories of Caste",
+    "Social Emulation and Institutional Diffusion"
+  ],
+  "abstract": "In this concluding section, Ambedkar distinguishes between the mechanism, genesis, and spread of caste. He argues that customs such as Sati, enforced widowhood, and child marriage were functional means later idealized through philosophy. Defining caste as an enclosed class, he identifies the Brahmin class as the first group to institutionalize endogamy, with other castes adopting similar practices through social imitation rather than coercion or divine legislation. Ambedkar decisively rejects scriptural, law-giver, and great-man theories of caste, establishing caste as a socially evolved institution sustained by imitation, rationalization, and structural necessity rather than conscious design."
+}
+,"data23.txt": {
+  "author": "B. R. Ambedkar",
+  "title": "Castes in India: Their Mechanism, Genesis and Development",
+  "year": 1916,
+  "source": "Dr. Babasaheb Ambedkar: Writings and Speeches, Vol. 1",
+  "type": "Academic Paper",
+  "context": "Anthropological and Sociological Analysis of the Caste System",
+  "section": "Spread of Caste through Social Imitation and Prestige Hierarchy",
+  "category": "Sociology / Anthropology / Social Stratification Theory",
+  "themes": [
+    "Critique of Occupational Theories of Caste",
+    "Rejection of Naturalistic and Evolutionary Explanations",
+    "Caste Not Inevitable or Natural",
+    "Class System Preceding Caste",
+    "Transition from Open Class to Closed Caste",
+    "Endogamy as Fashion and Social Norm",
+    "Imitation as Social Mechanism",
+    "Gabriel Tarde’s Laws of Imitation",
+    "Prestige and Social Hierarchy",
+    "Brahmin as Model Caste",
+    "Imitation from Higher to Lower",
+    "Distance and Differential Imitation",
+    "Derivative Adoption of Caste Customs",
+    "Sati, Widowhood, and Child Marriage as Imitated Practices",
+    "Psychological Basis of Caste Formation",
+    "Caste as Socially Diffused Institution",
+    "Theocratic Society and Priesthood Prestige"
+  ],
+  "abstract": "In this section, Ambedkar develops the psychological explanation for the spread of caste in India. Rejecting occupational, evolutionary, and naturalistic theories, he argues that caste emerged when open social classes became endogamous through imitation of the Brahmin caste. Drawing on Gabriel Tarde’s laws of imitation, Ambedkar shows how prestige, proximity, and hierarchical influence led non-Brahmin classes to copy Brahmin social practices, including endogamy and associated customs. Caste formation is thus explained as a process of social emulation rather than divine command, natural evolution, or conscious coercion."
+}
+,"data24.txt": {
+  "author": "B. R. Ambedkar",
+  "title": "Castes in India: Their Mechanism, Genesis and Development",
+  "year": 1916,
+  "source": "Dr. Babasaheb Ambedkar: Writings and Speeches, Vol. 1",
+  "type": "Academic Paper",
+  "context": "Anthropological and Sociological Analysis of the Caste System",
+  "section": "Mechanistic Formation of Castes and Final Synthesis",
+  "category": "Sociology / Anthropology / Theory of Social Stratification",
+  "themes": [
+    "Caste as a System, Not an Isolated Unit",
+    "Plurality of Castes",
+    "Mechanistic Process of Caste Formation",
+    "Closing In vs Closing Out",
+    "Endogamy as Social Necessity",
+    "Excommunication and Social Exclusion",
+    "Creation of New Castes through Exclusion",
+    "Religious Sects and Mixed Castes",
+    "Caste as Self-Duplicating Institution",
+    "Fissiparous Nature of Caste",
+    "Critique of Racial Theories of Caste",
+    "Rejection of Colour as Basis of Caste",
+    "Critique of Occupational Explanations",
+    "Caste as Cultural Parcelling",
+    "Imitation and Excommunication as Dual Forces",
+    "Objectivity in Social Science",
+    "Limits of Existing Caste Theories",
+    "Caste Reform and Scientific Inquiry",
+    "Theory of Caste as Provisional and Testable"
+  ],
+  "abstract": "In this concluding section, Ambedkar introduces the mechanistic explanation of caste formation, showing how groups become castes not only by closing themselves in, but also by being forcibly closed out through excommunication. He emphasizes that caste exists only as a system of multiple interacting units and is inherently self-duplicating. Rejecting racial, occupational, and colour-based explanations, Ambedkar synthesizes his argument around cultural unity, endogamy, imitation, and exclusion. He concludes by positioning his theory as a scientific contribution—open to revision—aimed at redirecting caste studies toward objective, structural analysis rather than sentiment or scriptural justification."
+}
+,"data25.txt": {
+  "author": "B. R. Ambedkar",
+  "title": "What Congress and Gandhi Have Done to the Untouchables",
+  "year": 1945,
+  "source": "Dr. Babasaheb Ambedkar: Writings and Speeches",
+  "type": "Political Critique / Historical Analysis",
+  "context": "Critique of Congress Politics and Gandhian Approach to Untouchability",
+  "section": "Gandhi, Congress, and the Denial of Political Rights to Untouchables",
+  "category": "Political History / Dalit Politics / Indian National Movement",
+  "themes": [
+    "Untouchability and Social Exclusion",
+    "Critique of Mahatma Gandhi",
+    "Congress and Hindu Majority Politics",
+    "Failure of Anti-Untouchability Campaigns",
+    "Satyagraha and Its Selective Use",
+    "Temple Entry and Water Rights Movements",
+    "Mahad Satyagraha",
+    "Kala Ram Temple Satyagraha",
+    "Independent Dalit Mobilization",
+    "Round Table Conference",
+    "Communal Representation",
+    "Political Safeguards for Untouchables",
+    "Minority Rights",
+    "Master–Slave Relationship",
+    "Poona Pact",
+    "Fast unto Death as Political Coercion",
+    "Neutralization of Dalit Political Power",
+    "Critique of Moral Politics",
+    "Social Reform vs Political Power"
+  ],
+  "abstract": "In this section, Ambedkar delivers a sharp political critique of Mahatma Gandhi and the Indian National Congress for their failure to genuinely address untouchability. He documents Gandhi’s refusal to employ Satyagraha or fasting against caste Hindus, even while Untouchables endured violence during temple-entry and water-rights movements. Ambedkar argues that social reform without political power had repeatedly failed and that Untouchables therefore required constitutional safeguards. He critically examines Gandhi’s opposition to separate political representation for Untouchables at the Round Table Conference and interprets the Poona Pact as a coerced compromise that ultimately weakened Dalit political autonomy."
+},
+"speech1.txt":{
+  "author": "B. R. Ambedkar",
+  "source": "Dr. Babasaheb Ambedkar Writings and Speeches Vol. 2",
+  "title": "Speech on Grants for Education",
+  "type": "Legislative Speech / Policy Debate",
+  "year": "1927",
+  "date": "12 March 1927",
+  "institution": "Bombay Legislative Council",
+  "category": "Education Policy / Social Justice",
+  "themes": [
+    "Education funding",
+    "Primary education",
+    "Educational inequality",
+    "Backward classes",
+    "Depressed classes",
+    "Affirmative action",
+    "Public expenditure",
+    "Social justice"
+  ],
+  "context": "Debate on education grants and budgetary allocation",
+  "language": "English"
+},
+"speech2.txt":{
+  "author": "B. R. Ambedkar",
+  "source": "Dr. Babasaheb Ambedkar Writings and Speeches, Vol. 10",
+  "title": "Labour and Parliamentary Democracy",
+  "type": "Public Address / Political-Economic Analysis",
+  "year": "1938",
+  "audience": "Indian Federation of Labour / Labour leaders",
+  "category": "Labour Politics / Democracy Critique",
+  "themes": [
+    "Parliamentary democracy",
+    "Labour movement",
+    "Trade unionism",
+    "Labour party",
+    "Economic democracy",
+    "Social equality",
+    "Critique of nationalism",
+    "Political power of labour"
+  ],
+  "context": "Public address analysing the failure of parliamentary democracy and urging labour to form an independent political party",
+  "language": "English"
+}
+,
+"speech3.txt":{
+  
+  "author": "B. R. Ambedkar",
+  "source": "Constituent Assembly Debates of India",
+  "title": "Final Speech on the Adoption of the Constitution of India",
+  "date": "1949-11-25",
+  "year": "1949",
+  "venue": "Constituent Assembly of India",
+  "role": "Chairman, Drafting Committee",
+  "type": "Constitutional Speech / Legislative Address",
+  "category": "Constitution Making / Indian Democracy",
+  "themes": [
+    "Indian Constitution",
+    "Constituent Assembly",
+    "Drafting Committee",
+    "Constitutional process",
+    "Amendments and deliberation",
+    "Parliamentary democracy",
+    "Role of political parties",
+    "Institution-building",
+    "Constitutional governance"
+  ],
+  "context": "Closing address delivered by Dr. B. R. Ambedkar while presenting the final Constitution for adoption, reflecting on the drafting process, debates, amendments, and institutional responsibility",
+  "language": "English"
+},
+"speech4.txt":{
+  "author": "B. R. Ambedkar",
+  "source": "Constituent Assembly Debates of India",
+  "title": "Final Speech on the Adoption of the Constitution of India",
+  "date": "1949-11-25",
+  "year": "1949",
+  "venue": "Constituent Assembly of India",
+  "role": "Chairman, Drafting Committee",
+  "type": "Constitutional Speech / Legislative Address",
+  "section": "Constitutional Philosophy, Federalism, Democracy and Future Warnings",
+  "category": "Indian Constitution / Federalism / Democratic Governance",
+  "themes": [
+    "Working of the Constitution",
+    "Role of people and political parties",
+    "Parliamentary democracy",
+    "Federalism and Centre-State relations",
+    "Emergency powers",
+    "Constitutional amendments",
+    "Political parties and ideology",
+    "National unity vs creed",
+    "Safeguarding independence",
+    "Future of Indian democracy"
+  ],
+  "context": "Continuation of Dr. Ambedkar’s concluding address focusing on how constitutions function in practice, criticism from communists and socialists, federal structure, emergency powers, dangers to independence, and warnings about political factionalism",
+  "language": "English"
+}
+,
+"speech5.txt":{
+  "author": "B. R. Ambedkar",
+  "source": "Constituent Assembly Debates of India",
+  "title": "Final Speech on the Adoption of the Constitution of India",
+  "date": "1949-11-25",
+  "year": "1949",
+  "venue": "Constituent Assembly of India",
+  "role": "Chairman, Drafting Committee",
+  "type": "Constitutional Speech / Legislative Address",
+  "section": "Democracy, Constitutional Morality, Social Democracy and Fraternity",
+  "category": "Indian Constitution / Democracy / Social Justice",
+  "themes": [
+    "Indian democratic traditions",
+    "Parliamentary democracy",
+    "Danger of dictatorship",
+    "Constitutional methods vs revolution",
+    "Grammar of Anarchy",
+    "Hero worship in politics",
+    "Social democracy",
+    "Liberty, Equality, Fraternity",
+    "Caste and graded inequality",
+    "National unity",
+    "Future of Indian democracy"
+  ],
+  "context": "Concluding reflections of Dr. Ambedkar’s final address stressing constitutional morality, rejection of unconstitutional methods, dangers of hero-worship, necessity of social democracy, fraternity, and removal of caste-based inequality to safeguard India’s democratic future",
+  "language": "English"
+},
+"speech6.txt":{
+  "author": "B. R. Ambedkar",
+  "source": "Dr. Babasaheb Ambedkar Writings and Speeches",
+  "title": "Mahad Satyagraha",
+  "date": "1927-12-25",
+  "year": "1927",
+  "place": "Mahad, Kolaba District (present-day Raigad), Bombay Presidency",
+  "type": "Speech / Social Reform Address",
+  "event": "Mahad Chavdar Lake Satyagraha",
+  "movement": "Dalit Movement / Anti-Untouchability Movement",
+  "category": "Social Justice / Anti-Caste Movement",
+  "themes": [
+    "Untouchability",
+    "Caste system",
+    "Graded inequality",
+    "Intermarriage as root reform",
+    "Social equality",
+    "Human dignity",
+    "Dalit self-emancipation",
+    "Social revolution",
+    "Peaceful resistance",
+    "Nation-building"
+  ],
+  "context": "A historic speech delivered by Dr. B. R. Ambedkar during the Mahad Chavdar Lake Satyagraha, asserting the human equality of Dalits, explaining that untouchability is rooted in the caste system, identifying the ban on intermarriage as the core mechanism sustaining caste hierarchy, rejecting reliance on upper castes for reform, and framing the struggle as a necessary, peaceful, and irreversible social revolution essential for national unity and moral regeneration of Hindu society.",
+  "language": "English",
+  "speech_id": "AMBEDKAR_MAHAD_SATYAGRAHA_1927",
+  "document_scope": "Complete speech (combined segments)",
+  "chunking_rule": "All chunks derived from this speech must share identical metadata"
+},
+"speech7.txt":{
+  "author": "B. R. Ambedkar",
+  "source": "Dr. Babasaheb Ambedkar Writings and Speeches, Vol. 2",
+  "title": "Speech on Maternity Benefit Bill",
+  "date": "1928-07-28",
+  "year": "1928",
+  "type": "Legislative Speech / Policy Argument",
+  "venue": "Bombay Legislative Council",
+  "category": "Labour Welfare / Women's Rights / Social Legislation",
+  "themes": [
+    "Maternity benefits",
+    "Women's labour welfare",
+    "State responsibility",
+    "Employer liability",
+    "Industrial justice",
+    "Public health",
+    "Prenatal and postnatal care",
+    "Social responsibility of industry",
+    "Economic fairness"
+  ],
+  "context": "A legislative speech delivered by Dr. B. R. Ambedkar supporting the first reading of the Maternity Benefit Bill, defending maternity welfare as a matter of national interest, arguing for shared responsibility between the government and employers, rebutting objections regarding industrial burden, wage reduction, limited scope to factories, and regional application, and framing maternity protection as essential to public health, social justice, and ethical industrial policy.",
+  "language": "English",
+  "speech_id": "AMBEDKAR_MATERNITY_BENEFIT_BILL_1928",
+  "document_scope": "Complete legislative speech",
+  "chunking_rule": "All chunks derived from this speech must use identical metadata"
+}
+,
+"speech8.txt":{
+  "author": "B. R. Ambedkar",
+  "source": "Dr. Babasaheb Ambedkar Writings and Speeches, Vol. 2",
+  "title": "On Probation of Offenders Bill",
+  "date": "1938-01-20",
+  "year": "1938",
+  "type": "Legislative Speech / Policy Argument",
+  "venue": "Bombay Legislative Assembly",
+  "category": "Criminal Justice Reform / Juvenile Justice / Legal Safeguards",
+  "themes": [
+    "Probation of offenders",
+    "Juvenile justice",
+    "Parental liability",
+    "Legal vagueness",
+    "Risk of state oppression",
+    "Due process",
+    "Comparative law (English statute)",
+    "Legislative scrutiny",
+    "Select committee review"
+  ],
+  "context": "A legislative speech by Dr. B. R. Ambedkar supporting the first reading of the Probation of Offenders Bill while critically examining Clause 6, which permits courts to penalize parents or guardians for a minor’s offence based on vague notions such as neglect or conducing. Ambedkar warns that undefined terms may lead to oppression and misuse of power, draws analogies from the Civil Disobedience Movement, and recommends referring the Bill to a select committee to remove ambiguities and improve safeguards before enactment.",
+  "language": "English",
+  "speech_id": "AMBEDKAR_PROBATION_OF_OFFENDERS_BILL_1938",
+  "document_scope": "Complete legislative speech",
+  "chunking_rule": "All chunks derived from this speech must use identical metadata"
+},
+"speech9.txt":{
+  "author": "B. R. Ambedkar",
+  "source": "Dr. Babasaheb Ambedkar Writings and Speeches, Vol. 2",
+  "title": "Speech on Prohibition",
+  "date": "1927-03-10",
+  "year": "1927",
+  "type": "Legislative Speech / Policy Debate",
+  "venue": "Bombay Legislative Council",
+  "category": "Excise Policy / Prohibition / Public Finance",
+  "themes": [
+    "Prohibition policy",
+    "Excise administration",
+    "Illicit liquor production",
+    "High taxation and black markets",
+    "Political economy of consumption",
+    "Revenue versus public welfare",
+    "Social responsibility of the state",
+    "Progressive taxation",
+    "Nation-building through fiscal policy"
+  ],
+  "context": "In this legislative speech, Dr. B. R. Ambedkar critiques the Excise Minister’s approach to prohibition in the Bombay Presidency. While supporting the moral objective of prohibition, he argues that excessively high excise tariffs on country liquor incentivize illicit production and consumption, thereby defeating the policy’s purpose. Drawing on principles of political economy, Ambedkar emphasizes that prohibition cannot succeed without a sound fiscal strategy to replace lost excise revenue. He stresses the necessity of progressive taxation, urging the government to tax those with greater capacity to pay, and insists that additional taxation is justifiable only if used for nation-building and public welfare rather than mere administrative maintenance.",
+  "language": "English",
+  "speech_id": "AMBEDKAR_PROHIBITION_SPEECH_1927",
+  "document_scope": "Complete legislative speech",
+  "chunking_rule": "All chunks derived from this speech must use identical metadata"
+}
+,
+"speech10.txt":{
+  "author": "B. R. Ambedkar",
+  "source": "Dr. Babasaheb Ambedkar Writings and Speeches, Vol. 2",
+  "title": "Speech on Punishment of Whipping Bill",
+  "date": "1933-02-18",
+  "year": "1933",
+  "type": "Legislative Speech / Policy Argument",
+  "venue": "Bombay Legislative Council",
+  "category": "Criminal Law / Penal Policy / Public Order",
+  "themes": [
+    "Punishment and proportionality",
+    "Communal riots",
+    "Scope of criminal legislation",
+    "Limits of state coercive power",
+    "Rule of law",
+    "Unlawful assembly and rioting",
+    "Penal restraint",
+    "Legal precision in legislation",
+    "Protection against overbroad laws"
+  ],
+  "context": "In this speech, Dr. B. R. Ambedkar evaluates the Punishment of Whipping Bill and accepts neither the novelty nor the legitimacy of whipping as punishment as the core issue, since whipping already existed in Indian law. His primary concern is the excessive breadth of the bill, which seeks to apply whipping to all forms of rioting under the Indian Penal Code. Ambedkar argues that whipping, being an extreme punishment, should be restricted strictly to communal riots and not extended to ordinary riots arising from industrial disputes or minor civil conflicts. He emphasizes proportionality, legal precision, and the dangers of indiscriminate penal expansion, reflecting his legal-philosophical commitment to restrained and purpose-specific criminal legislation.",
+  "language": "English",
+  "speech_id": "AMBEDKAR_WHIPPING_BILL_1933",
+  "document_scope": "Complete legislative speech",
+  "chunking_rule": "All chunks derived from this speech must use identical metadata"
+}
+,
+"speech11.txt":{
+  "author": "B. R. Ambedkar",
+  "source": "Dr. Babasaheb Ambedkar Writings and Speeches, Vol. 2",
+  "title": "Speech on Tobacco Duty Act Amendment Bill",
+  "date": "1938-03-05",
+  "year": "1938",
+  "type": "Legislative Speech / Policy Argument",
+  "venue": "Bombay Legislative Assembly",
+  "category": "Fiscal Policy / Parliamentary Procedure / Taxation Law",
+  "themes": [
+    "Parliamentary procedure",
+    "Finance Bill classification",
+    "Estoppel and waiver in legislative practice",
+    "Legislative authority over taxation",
+    "Fiscal accountability",
+    "Rights of the legislature",
+    "Revenue generation",
+    "Interpretation of House rules",
+    "Limits of executive power in finance matters"
+  ],
+  "context": "In this speech, Dr. B. R. Ambedkar intervenes in a procedural dispute concerning the Tobacco Duty Act Amendment Bill, focusing on whether the bill should be treated as a Finance Bill or merely as legislation regulating administrative machinery for taxation. He rejects the argument that prior approval of other taxes creates waiver or estoppel against further debate, asserting the independent authority of the House to grant or refuse supplies. Ambedkar demonstrates that the primary object of the bill is revenue generation—specifically to offset losses from prohibition policy—thereby qualifying it as a Finance Bill. His intervention highlights his deep engagement with parliamentary procedure, fiscal responsibility, and the constitutional principle that taxation must remain under effective legislative control.",
+  "language": "English",
+  "speech_id": "AMBEDKAR_TOBACCO_DUTY_BILL_1938",
+  "document_scope": "Complete legislative speech",
+  "chunking_rule": "All chunks derived from this speech must use identical metadata"
+}
+
+
+
+
+}
+
+
+
+
+
+
+
+
