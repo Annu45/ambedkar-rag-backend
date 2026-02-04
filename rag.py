@@ -5,25 +5,21 @@ import google.generativeai as genai
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 def answer_question(question):
-    print(f"Asking Gemini Directly: {question}")
+    print(f"Asking Gemini: {question}")
     
+    # 1. Try the newest, fastest model first
     try:
-        # We use the Flash model which is faster and has a healthy quota
-        model = genai.GenerativeModel("gemini-pro")
-        
-        # We give him a persona so he still acts like Dr. Ambedkar
-        prompt = f"""
-        You are Dr. B.R. Ambedkar. 
-        You are speaking to a student.
-        Answer the following question in the first person (using 'I').
-        Keep your answer short, inspiring, and educational (max 3 sentences).
-        
-        Question: {question}
-        """
-        
-        response = model.generate_content(prompt)
+        model = genai.GenerativeModel("gemini-1.5-flash")
+        response = model.generate_content(question)
         return response.text.strip()
-
-    except Exception as e:
-        print(f"Error: {e}")
-        return "My apologies, I am taking a moment to think. Please ask me again."
+    except Exception as e1:
+        print(f"Flash failed ({e1}). Trying Pro...")
+        
+        # 2. If Flash fails, try the standard model
+        try:
+            model = genai.GenerativeModel("gemini-pro")
+            response = model.generate_content(question)
+            return response.text.strip()
+        except Exception as e2:
+            print(f"All models failed. Error: {e2}")
+            return "My apologies, I am having trouble connecting to Google right now. Please ask again."

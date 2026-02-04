@@ -3,6 +3,6 @@ uvicorn
 gTTS
 python-dotenv
 qdrant-client
-google-generativeai
+google-generativeai>=0.7.2
 pydantic
 requests
