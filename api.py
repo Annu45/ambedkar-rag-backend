@@ -2,72 +2,48 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-from dotenv import load_dotenv
 from rag import answer_question
-import uuid
+from gtts import gTTS
 import os
-import threading
-from gtts import gTTS  # ✅ CHANGED: Using gTTS instead of pyttsx3
+import uuid
 
-print("API loaded")
-load_dotenv()
+app = FastAPI()
 
-app = FastAPI(
-    title="Dr. Ambedkar RAG API",
-    description="RAG-based QA system powered by Qdrant + Gemini",
-    version="1.0"
-)
-
-# ✅ REQUIRED FOR RENDER (DO NOT REMOVE)
-@app.get("/")
-def health():
-    return {"status": "API running"}
-
+# 1. ENABLE CORS (Allow Vercel to talk to Render)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # Allows all websites to connect
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Audio directory
-AUDIO_DIR = "audio"
-os.makedirs(AUDIO_DIR, exist_ok=True)
-
-app.mount("/audio", StaticFiles(directory=AUDIO_DIR), name="audio")
+# 2. Setup Audio Directory
+os.makedirs("audio", exist_ok=True)
+app.mount("/audio", StaticFiles(directory="audio"), name="audio")
 
 class Query(BaseModel):
     question: str
 
-
-# ✅ CLOUD-SAFE TTS (Uses Google Translate TTS instead of system drivers)
-def text_to_speech_safe(text: str, file_path: str):
-    try:
-        # gTTS generates MP3 audio without needing sound card drivers
-        tts = gTTS(text=text, lang='en')
-        tts.save(file_path)
-    except Exception as e:
-        print("TTS failed:", e)
-
+@app.get("/")
+def home():
+    return {"status": "Dr. Ambedkar API is Live"}
 
 @app.post("/ask")
-def ask_question(query: Query):
-    answer = answer_question(query.question)
-
-    # ✅ CHANGED: Using .mp3 which is smaller and standard for web
-    audio_filename = f"{uuid.uuid4()}.mp3"
-    audio_path = os.path.join(AUDIO_DIR, audio_filename)
-
-    # ✅ Run TTS in background thread (NON-BLOCKING)
-    threading.Thread(
-        target=text_to_speech_safe,
-        args=(answer, audio_path),
-        daemon=True
-    ).start()
-
+def ask_endpoint(query: Query):
+    print(f"Received question: {query.question}")
+    
+    # 1. Get Text Answer from AI
+    text_response = answer_question(query.question)
+    
+    # 2. Convert to Audio (Text-to-Speech)
+    filename = f"{uuid.uuid4()}.mp3"
+    filepath = f"audio/{filename}"
+    tts = gTTS(text=text_response, lang='en')
+    tts.save(filepath)
+    
+    # 3. Return Data
     return {
-        "question": query.question,
-        "answer": answer,
-        "audio_url": f"/audio/{audio_filename}"
+        "answer": text_response,
+        "audio_url": f"/audio/{filename}"
     }
