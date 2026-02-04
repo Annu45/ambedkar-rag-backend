@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# 1. Setup Google Gemini (The Brain)
+# 1. Setup Google (The Brain)
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel('gemini-1.5-flash')
 
@@ -15,20 +15,17 @@ qdrant_client = QdrantClient(
     api_key=os.getenv("QDRANT_API_KEY")
 )
 
-def get_embedding(text):
-    """Get vector from Google instead of local computer"""
-    result = genai.embed_content(
-        model="models/embedding-001",
-        content=text,
-        task_type="retrieval_query"
-    )
-    return result['embedding']
-
 def answer_question(question: str):
     print(f"Thinking about: {question}")
     
-    # 1. Convert question to vector (using Cloud)
-    query_vector = get_embedding(question)
+    # 1. Convert question to vector (Using Google Cloud)
+    # This is lightweight because it happens on Google's servers
+    embedding_result = genai.embed_content(
+        model="models/embedding-001",
+        content=question,
+        task_type="retrieval_query"
+    )
+    query_vector = embedding_result['embedding']
 
     # 2. Search Qdrant
     search_result = qdrant_client.search(
