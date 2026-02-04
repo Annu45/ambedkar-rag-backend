@@ -9,7 +9,7 @@ def answer_question(question):
     
     try:
         # We use the Flash model which is faster and has a healthy quota
-        model = genai.GenerativeModel("gemini-1.5-flash")g
+        model = genai.GenerativeModel("gemini-1.5-flash")
         
         # We give him a persona so he still acts like Dr. Ambedkar
         prompt = f"""
