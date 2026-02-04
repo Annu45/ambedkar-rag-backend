@@ -1,5 +1,3 @@
-console.log("SCRIPT MODULE LOADED");
-
 import * as THREE from "https://unpkg.com/three@0.158.0/build/three.module.js";
 import { GLTFLoader } from "https://unpkg.com/three@0.158.0/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "https://unpkg.com/three@0.158.0/examples/jsm/loaders/DRACOLoader.js";
@@ -10,26 +8,24 @@ let talkingAction;
 const clock = new THREE.Clock();
 const synth = window.speechSynthesis;
 
-/* ========================== SPEECH SYNTHESIS HELPER ========================== */
 function speakWithMaleVoice(text) {
-  // Cancel any ongoing speech
+  const cleanText = text.replace(/[.*#_~]/g, ''); 
   synth.cancel();
 
-  const utterance = new SpeechSynthesisUtterance(text);
+  const utterance = new SpeechSynthesisUtterance(cleanText);
   const voices = synth.getVoices();
 
-  // 1. Try to find a high-quality Indian Male or International Male voice
   const maleVoice = voices.find(v => 
     v.name.includes("Google UK English Male") || 
     v.name.includes("Rishi") || 
-    (v.name.includes("Male") && v.lang.startsWith("en"))
-  ) || voices[0]; // Fallback to first voice if no specific male voice found
+    v.name.toLowerCase().includes("male") ||
+    v.name.includes("Daniel")
+  ) || voices[0];
 
   utterance.voice = maleVoice;
-  utterance.pitch = 0.85; // Lower pitch for a more authoritative male tone
-  utterance.rate = 0.95;  // Slightly slower pace for clarity
+  utterance.pitch = 0.85; 
+  utterance.rate = 0.95;  
 
-  // 2. Sync with Avatar Animation
   utterance.onstart = () => {
     if (talkingAction) {
       talkingAction.reset().play();
@@ -38,19 +34,17 @@ function speakWithMaleVoice(text) {
 
   utterance.onend = () => {
     if (talkingAction) {
-      talkingAction.fadeOut(0.5); // Smoothly stop talking
+      talkingAction.fadeOut(0.5);
     }
   };
 
   synth.speak(utterance);
 }
 
-// Load voices (required for Chrome/Edge async loading)
 if (synth.onvoiceschanged !== undefined) {
   synth.onvoiceschanged = () => synth.getVoices();
 }
 
-/* ========================== RAG QUESTION FUNCTION ========================== */
 window.askQuestion = async function () {
   const question = document.getElementById("question").value;
   if (!question) return;
@@ -68,7 +62,6 @@ window.askQuestion = async function () {
     const answer = data.answer || "No answer returned";
     answerDiv.innerText = answer;
     
-    // Trigger the Male Voice instead of playing an audio file
     speakWithMaleVoice(answer);
 
   } catch (err) {
@@ -77,12 +70,10 @@ window.askQuestion = async function () {
   }
 };
 
-/* ========================== SCENE + CAMERA ========================== */
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
 const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
 
-/* ========================== RENDERER ========================== */
 const container = document.getElementById("avatar-container");
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -90,17 +81,16 @@ renderer.setSize(container.clientWidth, container.clientHeight);
 renderer.setClearColor(0x000000, 1);
 container.appendChild(renderer.domElement);
 
-/* ========================== LIGHTS ========================== */
 scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 1.5));
 const dirLight = new THREE.DirectionalLight(0xffffff, 2);
 dirLight.position.set(5, 10, 7);
 scene.add(dirLight);
 
-/* ========================== CONTROLS (LOCKED) ========================== */
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.enablePan = false; controls.enableZoom = false; controls.enableRotate = false;
+controls.enablePan = false; 
+controls.enableZoom = false; 
+controls.enableRotate = false;
 
-/* ========================== LOAD MODEL ========================== */
 let model;
 const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath("https://www.gstatic.com/draco/v1/decoders/");
@@ -136,9 +126,8 @@ loader.load("./models/Dr_ambedkar2.glb", (gltf) => {
   camera.position.set(0, size.y * 0.55, distance * 1.35);
   camera.lookAt(0, size.y * 0.55, 0);
 
-}, undefined, (err) => console.error("GLB ERROR", err));
+}, undefined, (err) => console.error(err));
 
-/* ========================== LOOP ========================== */
 function animate() {
   requestAnimationFrame(animate);
   if (mixer) mixer.update(clock.getDelta());
@@ -146,7 +135,6 @@ function animate() {
 }
 animate();
 
-/* ========================== RESIZE ========================== */
 window.addEventListener("resize", () => {
   const w = container.clientWidth;
   const h = container.clientHeight;
