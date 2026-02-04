@@ -3,7 +3,6 @@ uvicorn
 gTTS
 python-dotenv
 qdrant-client
-sentence-transformers
 google-generativeai
 pydantic
 requests
