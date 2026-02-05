@@ -3,38 +3,31 @@ import { GLTFLoader } from "https://unpkg.com/three@0.158.0/examples/jsm/loaders
 import { DRACOLoader } from "https://unpkg.com/three@0.158.0/examples/jsm/loaders/DRACOLoader.js";
 import { OrbitControls } from "https://unpkg.com/three@0.158.0/examples/jsm/controls/OrbitControls.js";
 
-let mixer;
-let talkingAction;
+let mixer, talkingAction, model;
 const clock = new THREE.Clock();
 const synth = window.speechSynthesis;
 
-// 1. Audio Logic
 function speakWithMaleVoice(text) {
   const cleanText = text.replace(/[.*#_~]/g, ''); 
   synth.cancel();
   const utterance = new SpeechSynthesisUtterance(cleanText);
   const voices = synth.getVoices();
-  const maleVoice = voices.find(v => 
-    v.name.includes("Google UK English Male") || 
-    v.name.toLowerCase().includes("male")
-  ) || voices[0];
-
+  const maleVoice = voices.find(v => v.name.includes("Google UK English Male") || v.name.toLowerCase().includes("male")) || voices[0];
   utterance.voice = maleVoice;
   utterance.pitch = 0.85; 
   utterance.rate = 0.95;  
-
   utterance.onstart = () => { if (talkingAction) talkingAction.reset().play(); };
   utterance.onend = () => { if (talkingAction) talkingAction.fadeOut(0.5); };
   synth.speak(utterance);
 }
 
-// 2. API Call Logic
+if (synth.onvoiceschanged !== undefined) { synth.onvoiceschanged = () => synth.getVoices(); }
+
 window.askQuestion = async function () {
   const question = document.getElementById("question").value;
   if (!question) return;
   const answerDiv = document.getElementById("answer");
   answerDiv.innerText = "Thinking...";
-  
   try {
     const response = await fetch("https://ambedkar-api.onrender.com/ask", {
         method: "POST",
@@ -45,50 +38,58 @@ window.askQuestion = async function () {
     answerDiv.innerText = data.answer || "No answer returned";
     speakWithMaleVoice(answerDiv.innerText);
   } catch (err) {
-    answerDiv.innerText = "Error connecting to Cloud API.";
+    answerDiv.innerText = "Error connecting to the Cloud API.";
   }
 };
 
-// 3. Three.js Scene Setup
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
 const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
 const container = document.getElementById("avatar-container");
 const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(container.clientWidth, container.clientHeight);
 container.appendChild(renderer.domElement);
 
-// Lighting - Stronger for better visibility
 scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 2));
-const dirLight = new THREE.DirectionalLight(0xffffff, 2);
+const dirLight = new THREE.DirectionalLight(0xffffff, 2.5);
 dirLight.position.set(5, 10, 7);
 scene.add(dirLight);
 
-// 4. Model Loading - FIXED PATH
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enablePan = false; controls.enableZoom = false; controls.enableRotate = false;
+
 const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath("https://www.gstatic.com/draco/v1/decoders/");
 const loader = new GLTFLoader();
 loader.setDRACOLoader(dracoLoader);
 
-// FIXED: Removed "./models/" because file is in "frontend/models" 
-// and script.js is likely in "frontend/"
 loader.load("models/Dr_ambedkar2.glb", (gltf) => {
-  const model = gltf.scene;
-  model.scale.set(0.25, 0.25, 0.25);
-  scene.add(model);
-
-  // Auto-Center Camera on Model
+  model = gltf.scene;
+  model.scale.set(0.5, 0.5, 0.5);
+  model.rotation.y = 0;
+  
   const box = new THREE.Box3().setFromObject(model);
   const size = box.getSize(new THREE.Vector3());
-  camera.position.set(0, size.y * 0.6, 3); // Positioned to see head/chest
-  camera.lookAt(0, size.y * 0.5, 0);
+  const center = box.getCenter(new THREE.Vector3());
+
+  model.position.x = -center.x;
+  model.position.z = -center.z;
+  model.position.y = -box.min.y;
+  scene.add(model);
 
   if (gltf.animations.length) {
     mixer = new THREE.AnimationMixer(model);
     const clip = gltf.animations.find(c => c.name.includes("Anim.001"));
-    if (clip) talkingAction = mixer.clipAction(clip);
+    if (clip) {
+      talkingAction = mixer.clipAction(clip);
+      talkingAction.loop = THREE.LoopRepeat;
+    }
   }
-}, undefined, (err) => console.error("Model Load Error:", err));
+
+  camera.position.set(0, size.y * 0.6, 2.8);
+  camera.lookAt(0, size.y * 0.5, 0);
+}, undefined, (err) => console.error(err));
 
 function animate() {
   requestAnimationFrame(animate);
@@ -96,3 +97,11 @@ function animate() {
   renderer.render(scene, camera);
 }
 animate();
+
+window.addEventListener("resize", () => {
+  const w = container.clientWidth;
+  const h = container.clientHeight;
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+});
