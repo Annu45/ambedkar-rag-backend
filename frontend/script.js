@@ -2,107 +2,91 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-// --- VISUAL LOGGING (Since you can't inspect) ---
-const logBox = document.createElement('div');
-logBox.style.position = 'absolute';
-logBox.style.top = '10px';
-logBox.style.left = '10px';
-logBox.style.color = '#00ff00';
-logBox.style.fontFamily = 'monospace';
-logBox.style.zIndex = '9999';
-logBox.style.background = 'rgba(0,0,0,0.8)';
-logBox.style.padding = '10px';
-logBox.style.pointerEvents = 'none'; // Let clicks pass through
-document.body.appendChild(logBox);
-
-function log(msg) {
-    logBox.innerHTML += `> ${msg}<br>`;
-    console.log(msg);
-}
-
-log("🚀 Starting 3D Engine...");
-
-// 1. SETUP
+// 1. SCENE SETUP
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x111111); // Dark Grey (Not Black, to see outlines)
+scene.background = new THREE.Color(0x000000); 
 
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(0, 1, 3); // Look from slightly above
+camera.position.set(0, 1.4, 3.5);
 
 const container = document.getElementById('canvas-container');
-if (!container) {
-    log("❌ ERROR: 'canvas-container' div missing!");
-} else {
-    log("✅ Container found.");
-}
-
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
 container.appendChild(renderer.domElement);
 
-// 2. LIGHTS
-const ambient = new THREE.AmbientLight(0xffffff, 1);
-scene.add(ambient);
+// 2. LIGHTING
+scene.add(new THREE.AmbientLight(0xffffff, 1.5));
 const dirLight = new THREE.DirectionalLight(0xffffff, 2);
 dirLight.position.set(2, 2, 5);
 scene.add(dirLight);
 
-// 3. DEBUG CUBE (The Red Box)
-const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-const cube = new THREE.Mesh(geometry, material);
-cube.position.set(0, 0, 0); // Center
-scene.add(cube);
-log("✅ Red Debug Cube added.");
-
-// 4. LOAD AVATAR
+// 3. LOAD AVATAR
 const loader = new GLTFLoader();
-log("⏳ Loading Avatar...");
-loader.load(
-    './models/avatar.glb', // Try standard path
-    (gltf) => {
-        const avatar = gltf.scene;
-        avatar.position.set(0, -1, 0);
-        avatar.scale.set(1.1, 1.1, 1.1);
-        scene.add(avatar);
-        log("🎉 Avatar Loaded Successfully!");
-        
-        // Hide Cube if Avatar loads
-        cube.visible = false; 
-    },
-    (xhr) => {
-        // Progress
-    },
-    (error) => {
-        log("⚠️ Avatar Load Failed!");
-        log("Trying backup path...");
-        // Backup: Try loading from root if frontend/ fails
-        loader.load('models/avatar.glb', (gltf) => {
-             const avatar = gltf.scene;
-             avatar.position.set(0, -1, 0);
-             avatar.scale.set(1.1, 1.1, 1.1);
-             scene.add(avatar);
-             log("🎉 Backup Path Worked!");
-             cube.visible = false;
-        }, undefined, (err2) => {
-            log("❌ MODEL ERROR: Could not find avatar.glb");
-            log("Check 'models' folder in GitHub.");
-        });
-    }
-);
+let mixer;
 
-// 5. ANIMATE
+// UPDATED PATH TO MATCH GITHUB FILENAME EXACTLY
+loader.load('./models/Dr_ambedkar2.glb', (gltf) => {
+    const avatar = gltf.scene;
+    avatar.scale.set(1.1, 1.1, 1.1);
+    avatar.position.set(0, -1, 0);
+    scene.add(avatar);
+
+    if (gltf.animations.length > 0) {
+        mixer = new THREE.AnimationMixer(avatar);
+        mixer.clipAction(gltf.animations[0]).play();
+    }
+}, undefined, (error) => {
+    console.error('Error loading avatar:', error);
+});
+
+// 4. CONTROLS & ANIMATION
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.enablePan = false;
+
+const clock = new THREE.Clock();
 function animate() {
     requestAnimationFrame(animate);
-    cube.rotation.x += 0.01; // Spin the cube
-    cube.rotation.y += 0.01;
+    if (mixer) mixer.update(clock.getDelta());
+    controls.update();
     renderer.render(scene, camera);
 }
 animate();
 
-// 6. RESIZE HANDLER
+// 5. WINDOW RESIZE
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
+// 6. CHAT LOGIC
+window.sendMessage = async function() {
+    const input = document.getElementById("user-input");
+    const status = document.getElementById("status-text");
+    if (!input.value) return;
+
+    status.innerText = "Thinking...";
+    const question = input.value;
+    input.value = "";
+
+    try {
+        const res = await fetch("https://ambedkar-api.onrender.com/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: question })
+        });
+        const data = await res.json();
+        status.innerText = "";
+        speakText(data.response);
+    } catch (e) {
+        status.innerText = "Offline.";
+    }
+};
+
+function speakText(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en-IN";
+    window.speechSynthesis.speak(utterance);
+}
