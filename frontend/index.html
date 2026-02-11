@@ -1,76 +1,114 @@
-<div class="team-footer">
-    <div class="team-header">Project Team</div>
-    <div class="team-grid">
-        <span>Shristi Muskan (2023BITE003)</span>
-        <span>Bhumika Joshi (2023BITE001)</span>
-        <span>Ikjot Kour (2023BITE020)</span>
-        <span>Suhani Gupta (2023BITE018)</span>
-        <span>Neharika Bajaj (2023BITE021)</span>
-        <span>Saumya Sarngal (2023BCSE032)</span>
-        <span>Janvi Sharma (2023BITE014)</span>
-        <span>Annu Mathur (2023BCSE008)</span>
-        <span>Alok Kumar (2023BCSE013)</span>
-        <span>Prashant Goyal (2023BCSE063)</span>
-        <span>Akshat Singh (2023BITE029)</span>
-        <span>Jatin Kumar (2023BITE030)</span>
-        <span>Ankit Maholiya (2023BITE006)</span>
-        <span>Lucky Yadav (2023BITE031)</span>
-        <span>Abhay Kumar (2023BITE023)</span>
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. B. R. Ambedkar AI Avatar</title>
+    <style>
+        /* MAIN LAYOUT & BLACK BACKGROUND */
+        body { margin: 0; padding: 0; overflow: hidden; background-color: #000; color: white; font-family: 'Segoe UI', sans-serif; }
+        
+        /* 3D CANVAS CONTAINER */
+        #canvas-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
 
-<style>
-    /* Remove the old marquee styles and add this */
-    .team-footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background: rgba(0, 0, 0, 0.85); /* Dark professional background */
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 15px 40px;
-        font-family: 'Segoe UI', sans-serif;
-        z-index: 1000;
-        backdrop-filter: blur(10px);
-    }
+        /* HEADER PILL */
+        .header-pill {
+            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.15); padding: 10px 30px; border-radius: 30px;
+            font-size: 18px; font-weight: 600; backdrop-filter: blur(5px); z-index: 10;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
 
-    .team-header {
-        color: #888;
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 8px;
-        text-align: center;
-    }
+        /* CHAT INTERFACE */
+        .chat-container {
+            position: absolute; bottom: 100px; /* Above the footer */
+            left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 800px; z-index: 10;
+            display: flex; gap: 10px;
+        }
+        input {
+            flex: 1; padding: 12px 20px; border-radius: 25px; border: none; outline: none;
+            background: rgba(30, 30, 30, 0.9); color: white; font-size: 16px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        button {
+            padding: 12px 25px; border-radius: 25px; border: none; cursor: pointer;
+            background: #333; color: white; font-weight: bold; transition: background 0.2s;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        button:hover { background: #555; }
 
-    .team-grid {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 8px 20px; /* Gap between names */
-        max-width: 1200px;
-        margin: 0 auto;
-    }
+        /* LOADING / STATUS TEXT */
+        #status-text {
+            position: absolute; top: 50%; left: 10%; transform: translateY(-50%);
+            font-size: 24px; color: rgba(255,255,255,0.7); z-index: 5;
+            max-width: 300px; line-height: 1.4;
+        }
 
-    .team-grid span {
-        color: #ccc; /* Uniform color for everyone */
-        font-size: 12px;
-        white-space: nowrap;
-        transition: color 0.2s ease;
-    }
-
-    .team-grid span:hover {
-        color: #fff; /* Slight brighten on hover */
-    }
-
-    /* Mobile responsiveness */
-    @media (max-width: 768px) {
+        /* --- PROFESSIONAL TEAM FOOTER --- */
         .team-footer {
-            position: relative; /* On mobile, let it sit at bottom of scroll */
-            padding: 20px;
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(0, 0, 0, 0.9); /* Dark background */
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 0; z-index: 1000;
+        }
+        .team-header {
+            color: #666; font-size: 10px; text-transform: uppercase; letter-spacing: 2px;
+            text-align: center; margin-bottom: 5px;
         }
         .team-grid {
-            gap: 5px 10px;
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 5px 15px;
+            max-width: 1200px; margin: 0 auto; padding: 0 20px;
         }
-    }
-</style>
+        .team-grid span {
+            color: #aaa; font-size: 11px; white-space: nowrap;
+        }
+        .team-grid span:hover { color: #fff; }
+    </style>
+</head>
+<body>
+
+    <div class="header-pill">Dr. B. R. Ambedkar AI Avatar</div>
+
+    <div id="status-text">Ask a question to begin...</div>
+
+    <div id="canvas-container"></div>
+
+    <div class="chat-container">
+        <input type="text" id="user-input" placeholder="Ask Dr. B. R. Ambedkar...">
+        <button onclick="sendMessage()">Ask</button>
+    </div>
+
+    <div class="team-footer">
+        <div class="team-header">Project Team</div>
+        <div class="team-grid">
+            <span>Shristi Muskan (2023BITE003)</span>
+            <span>Bhumika Joshi (2023BITE001)</span>
+            <span>Ikjot Kour (2023BITE020)</span>
+            <span>Suhani Gupta (2023BITE018)</span>
+            <span>Neharika Bajaj (2023BITE021)</span>
+            <span>Saumya Sarngal (2023BCSE032)</span>
+            <span>Janvi Sharma (2023BITE014)</span>
+            <span>Annu Mathur (2023BCSE008)</span>
+            <span>Alok Kumar (2023BCSE013)</span>
+            <span>Prashant Goyal (2023BCSE063)</span>
+            <span>Akshat Singh (2023BITE029)</span>
+            <span>Jatin Kumar (2023BITE030)</span>
+            <span>Ankit Maholiya (2023BITE006)</span>
+            <span>Lucky Yadav (2023BITE031)</span>
+            <span>Abhay Kumar (2023BITE023)</span>
+        </div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module" src="./script.js"></script>
+
+</body>
+</html>
