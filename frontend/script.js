@@ -1,121 +1,131 @@
-console.log("SCRIPT MODULE LOADED - RESTORED POSITION");
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-import * as THREE from "https://unpkg.com/three@0.158.0/build/three.module.js";
-import { GLTFLoader } from "https://unpkg.com/three@0.158.0/examples/jsm/loaders/GLTFLoader.js";
-import { DRACOLoader } from "https://unpkg.com/three@0.158.0/examples/jsm/loaders/DRACOLoader.js";
-import { OrbitControls } from "https://unpkg.com/three@0.158.0/examples/jsm/controls/OrbitControls.js";
+// 1. SETUP SCENE
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000); // Pure Black
 
-let mixer;
-let talkingAction;
-const clock = new THREE.Clock();
-const synth = window.speechSynthesis;
+// 2. SETUP CAMERA
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.set(0, 1.4, 3); // Positioned to see the face
 
-function speakWithMaleVoice(text) {
-  const cleanText = text.replace(/[.*#_~]/g, ''); 
-  synth.cancel();
-  const utterance = new SpeechSynthesisUtterance(cleanText);
-  const voices = synth.getVoices();
-  const maleVoice = voices.find(v => v.name.includes("Google UK English Male") || v.name.toLowerCase().includes("male")) || voices[0];
-  utterance.voice = maleVoice;
-  utterance.pitch = 0.85; 
-  utterance.rate = 0.95;  
+// 3. SETUP RENDERER (The part that was broken)
+const container = document.getElementById('canvas-container'); // MUST MATCH HTML ID
 
-  utterance.onstart = () => { if (talkingAction) { talkingAction.reset().play(); } };
-  utterance.onend = () => { if (talkingAction) { talkingAction.fadeOut(0.5); } };
-  synth.speak(utterance);
+if (!container) {
+    console.error("CRITICAL ERROR: 'canvas-container' not found in HTML!");
 }
 
-window.askQuestion = async function () {
-  const question = document.getElementById("question").value;
-  if (!question) return;
-  const answerDiv = document.getElementById("answer");
-  answerDiv.innerText = "Thinking...";
-  try {
-    const response = await fetch("https://ambedkar-api.onrender.com/ask", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question })
-    });
-    const data = await response.json();
-    const answer = data.answer || "No answer returned";
-    answerDiv.innerText = answer;
-    speakWithMaleVoice(answer);
-  } catch (err) {
-    console.error(err);
-    answerDiv.innerText = "Backend error";
-  }
-};
-
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x000000);
-const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
-
-const container = document.getElementById("avatar-container");
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(container.clientWidth, container.clientHeight);
-renderer.setClearColor(0x000000, 1);
+// Add the canvas to the HTML
 container.appendChild(renderer.domElement);
 
-scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 1.5));
+// 4. LIGHTING (Critical for visibility)
+const ambientLight = new THREE.AmbientLight(0xffffff, 1.5); // Soft white light
+scene.add(ambientLight);
+
 const dirLight = new THREE.DirectionalLight(0xffffff, 2);
-dirLight.position.set(5, 10, 7);
+dirLight.position.set(2, 2, 5);
 scene.add(dirLight);
 
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enablePan = false;
-controls.enableZoom = false;
-controls.enableRotate = false;
-
-let model;
-const dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath("https://www.gstatic.com/draco/v1/decoders/");
+// 5. LOAD THE AVATAR
 const loader = new GLTFLoader();
-loader.setDRACOLoader(dracoLoader);
+let avatar;
+let mixer; // For animations
 
-// FIXED PATH for your GitHub Structure
-loader.load("models/Dr_ambedkar2.glb", (gltf) => {
-  model = gltf.scene;
-  model.scale.set(0.25, 0.25, 0.25); // ORIGINAL SCALE
-  model.rotation.y = Math.PI / 2; // ORIGINAL ROTATION
+loader.load(
+    './models/avatar.glb', // Path to your model
+    (gltf) => {
+        avatar = gltf.scene;
+        
+        // Scale and Position
+        avatar.scale.set(1.1, 1.1, 1.1);
+        avatar.position.set(0, -1, 0); // Move down slightly
+        
+        scene.add(avatar);
+        console.log("✅ Avatar Loaded Successfully!");
 
-  const box = new THREE.Box3().setFromObject(model);
-  const size = box.getSize(new THREE.Vector3());
-  const center = box.getCenter(new THREE.Vector3());
-
-  model.position.x -= center.x;
-  model.position.z -= center.z;
-  model.position.y -= box.min.y;
-  scene.add(model);
-
-  if (gltf.animations.length) {
-    mixer = new THREE.AnimationMixer(model);
-    const talkingClip = gltf.animations.find(c => c.name.includes("Anim.001"));
-    if (talkingClip) {
-      talkingAction = mixer.clipAction(talkingClip);
-      talkingAction.loop = THREE.LoopRepeat;
+        // Setup Animation (Idle)
+        mixer = new THREE.AnimationMixer(avatar);
+        if (gltf.animations.length > 0) {
+            const action = mixer.clipAction(gltf.animations[0]);
+            action.play();
+        }
+    },
+    (xhr) => {
+        console.log(`Loading: ${(xhr.loaded / xhr.total * 100)}%`);
+    },
+    (error) => {
+        console.error('⚠️ Error loading avatar:', error);
     }
-  }
+);
 
-  // ORIGINAL CAMERA FRAMING LOGIC
-  const fov = camera.fov * (Math.PI / 180);
-  const distance = size.y / (2 * Math.tan(fov / 2));
-  camera.position.set(0, size.y * 0.55, distance * 1.35);
-  camera.lookAt(0, size.y * 0.55, 0);
+// 6. CONTROLS (Allow rotating)
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.enablePan = false;
+controls.minDistance = 2;
+controls.maxDistance = 5;
 
-}, undefined, (err) => console.error("GLB ERROR", err));
+// 7. RESPONSIVE WINDOW
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
 
+// 8. ANIMATION LOOP
+const clock = new THREE.Clock();
 function animate() {
-  requestAnimationFrame(animate);
-  if (mixer) mixer.update(clock.getDelta());
-  renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+    
+    const delta = clock.getDelta();
+    if (mixer) mixer.update(delta);
+    
+    controls.update();
+    renderer.render(scene, camera);
 }
 animate();
 
-window.addEventListener("resize", () => {
-  const w = container.clientWidth;
-  const h = container.clientHeight;
-  camera.aspect = w / h;
-  camera.updateProjectionMatrix();
-  renderer.setSize(w, h);
-});
+// 9. CONNECT CHAT TO BACKEND
+window.sendMessage = async function() {
+    const inputField = document.getElementById("user-input");
+    const statusText = document.getElementById("status-text");
+    const question = inputField.value;
+
+    if (!question) return;
+
+    statusText.innerText = "Thinking...";
+    inputField.value = "";
+
+    try {
+        // Send to Render Backend
+        const response = await fetch("https://ambedkar-api.onrender.com/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: question })
+        });
+
+        const data = await response.json();
+        statusText.innerText = ""; // Clear status
+        
+        // Speak the Answer
+        speakText(data.response);
+
+    } catch (error) {
+        statusText.innerText = "Error connecting to AI.";
+        console.error(error);
+    }
+};
+
+// 10. TEXT TO SPEECH (Browser Native)
+function speakText(text) {
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en-IN"; // Indian English
+    utterance.rate = 0.9;
+    synth.speak(utterance);
+}
