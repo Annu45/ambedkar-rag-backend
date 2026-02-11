@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js'; // NEW IMPORT
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 // 1. SCENE SETUP
@@ -21,10 +22,17 @@ const dirLight = new THREE.DirectionalLight(0xffffff, 2);
 dirLight.position.set(2, 2, 5);
 scene.add(dirLight);
 
-// 3. LOAD AVATAR (MATCHING GITHUB FILENAME)
+// 3. DRACO & GLTF LOADER SETUP (This fixes the error)
+const dracoLoader = new DRACOLoader();
+// Use Google's hosted decoder so you don't have to upload more files
+dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+
 const loader = new GLTFLoader();
+loader.setDRACOLoader(dracoLoader); // Connect Draco to GLTF
+
 let mixer;
 
+// Loading the model with the confirmed filename
 loader.load('./models/Dr_ambedkar2.glb', (gltf) => {
     const avatar = gltf.scene;
     avatar.scale.set(1.1, 1.1, 1.1);
@@ -35,11 +43,12 @@ loader.load('./models/Dr_ambedkar2.glb', (gltf) => {
         mixer = new THREE.AnimationMixer(avatar);
         mixer.clipAction(gltf.animations[0]).play();
     }
+    console.log("✅ Avatar loaded with Draco support!");
 }, undefined, (error) => {
     console.error('Error loading avatar:', error);
 });
 
-// 4. CONTROLS & ANIMATION
+// 4. ANIMATION & CONTROLS
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.enablePan = false;
