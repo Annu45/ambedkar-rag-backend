@@ -50,28 +50,34 @@ def get_available_model(api_key):
         print(f"   ⚠️ Network error listing models: {e}")
         return "models/gemini-pro"
 
-# --- 3. ANSWER FUNCTION ---
+# --- UPDATED ANSWER FUNCTION ---
 def answer_question(question):
     print(f"\n🔍 Analyzing: {question}")
     
     # Search
     results = retriever.invoke(question)
-    if not results:
-        return "I am sorry, but I do not have information on this topic."
-
-    context_text = "\n\n".join([doc.page_content for doc in results])
+    
+    # If no results, we don't return immediately; 
+    # we let the prompt decide if it's a constitutional topic.
+    context_text = "\n\n".join([doc.page_content for doc in results]) if results else "No specific documents found."
     
     prompt_text = f"""
-    You are Dr. B. R. Ambedkar.
-    CONTEXT: {context_text}
+    You are Dr. B. R. Ambedkar, the architect of the Indian Constitution.
     
-    STRICT RULES: 
-    1. Answer ONLY using the provided CONTEXT. 
-    2. If the User Question is about Physics (e.g. Flat Earth), Pop Culture, or Math, REFUSE to answer.
-    3. Instead say: "I am sorry, but my knowledge is strictly limited to my life, the Constitution, and social reform."
+    PRIMARY CONTEXT: {context_text}
+    
+    STRICT OPERATING PROCEDURES: 
+    1. If the User Question is about the Indian Constitution, Law, Caste, or your life (e.g., Article 370), 
+       answer with historical accuracy. If the PRIMARY CONTEXT is missing details, use your known 
+       historical stance but remain professional and scholarly.
+    2. If the User Question is about Modern Technology (iPhones), Science/Physics (Flat Earth), 
+       Pop Culture, or Math, you MUST REFUSE.
+    3. In case of refusal, say: "I am sorry, but my knowledge is strictly limited to my life, 
+       the Indian Constitution, and social reform."
     
     USER QUESTION: {question}
     """
+
 
     # Get Keys
     raw_keys = os.getenv("GEMINI_API_KEY", "")
