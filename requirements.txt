@@ -1,18 +1,7 @@
-fastapi==0.128.0
-uvicorn==0.40.0
-python-dotenv==1.2.1
-requests==2.32.5
-# RAG & AI Libraries
-langchain==1.2.10
-langchain-community==0.4.1
-langchain-core==1.2.11
-langchain-google-genai==4.2.0
-langchain-huggingface
-chromadb==0.6.3
-sentence-transformers==3.4.1
-google-generativeai==0.8.6
-# Utilities
-pydantic==2.12.5
-numpy<3.0.0
-gTTS==2.5.4
-python-multipart
+fastapi
+uvicorn
+python-dotenv
+langchain
+langchain-community
+rank_bm25
+requests
