@@ -1,100 +1,107 @@
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import * as THREE from "https://unpkg.com/three@0.158.0/build/three.module.js";
+import { GLTFLoader } from "https://unpkg.com/three@0.158.0/examples/jsm/loaders/GLTFLoader.js";
+import { DRACOLoader } from "https://unpkg.com/three@0.158.0/examples/jsm/loaders/DRACOLoader.js";
+import { OrbitControls } from "https://unpkg.com/three@0.158.0/examples/jsm/controls/OrbitControls.js";
 
-const container = document.getElementById('canvas-container');
+let mixer, talkingAction, model;
+const clock = new THREE.Clock();
+const synth = window.speechSynthesis;
 
 // 1. SCENE SETUP
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x000000); 
-
-// 2. CAMERA FOCUS (Original Side Position)
+scene.background = new THREE.Color(0x000000);
+const container = document.getElementById("avatar-container");
 const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-camera.position.set(0, 1.4, 3.8); 
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setSize(container.clientWidth, container.clientHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(container.clientWidth, container.clientHeight);
 container.appendChild(renderer.domElement);
 
-// 3. LIGHTING
-scene.add(new THREE.AmbientLight(0xffffff, 1.5));
-const dirLight = new THREE.DirectionalLight(0xffffff, 2.3);
-dirLight.position.set(2, 2, 5);
+// 2. LIGHTING
+scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 1.5));
+const dirLight = new THREE.DirectionalLight(0xffffff, 2);
+dirLight.position.set(5, 10, 7);
 scene.add(dirLight);
 
-// 4. DRACO LOADER SETUP (Crucial for loading Dr_ambedkar2.glb)
-const dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+// 3. CONTROLS (LOCKED TO PREVENT MOVING)
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enablePan = false;
+controls.enableZoom = false;
+controls.enableRotate = false;
 
+// 4. LOAD AVATAR
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath("https://www.gstatic.com/draco/v1/decoders/");
 const loader = new GLTFLoader();
 loader.setDRACOLoader(dracoLoader);
 
-let mixer;
+loader.load("models/Dr_ambedkar2.glb", (gltf) => {
+  model = gltf.scene;
+  model.scale.set(0.25, 0.25, 0.25); // ORIGINAL SCALE
+  model.rotation.y = Math.PI / 2; // ORIGINAL ROTATION
 
-// 5. LOAD THE MODEL
-loader.load('./models/Dr_ambedkar2.glb', (gltf) => {
-    const avatar = gltf.scene;
-    avatar.scale.set(1.15, 1.15, 1.15);
-    avatar.position.set(0, -1, 0); 
-    scene.add(avatar);
+  const box = new THREE.Box3().setFromObject(model);
+  const size = box.getSize(new THREE.Vector3());
+  const center = box.getCenter(new THREE.Vector3());
 
-    if (gltf.animations.length > 0) {
-        mixer = new THREE.AnimationMixer(avatar);
-        mixer.clipAction(gltf.animations[0]).play();
+  // Center model in its local space
+  model.position.x -= center.x;
+  model.position.z -= center.z;
+  model.position.y -= box.min.y;
+  scene.add(model);
+
+  if (gltf.animations.length) {
+    mixer = new THREE.AnimationMixer(model);
+    const talkingClip = gltf.animations.find(c => c.name.includes("Anim.001"));
+    if (talkingClip) {
+      talkingAction = mixer.clipAction(talkingClip);
+      talkingAction.loop = THREE.LoopRepeat;
     }
-}, undefined, (error) => {
-    console.error('Error loading avatar:', error);
-});
+  }
 
-// 6. CONTROLS (Center on Avatar)
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.enablePan = false;
-controls.target.set(0, 1.2, 0); // Focuses on the face
-controls.update();
+  // ORIGINAL CAMERA FRAMING LOGIC
+  const fov = camera.fov * (Math.PI / 180);
+  const distance = size.y / (2 * Math.tan(fov / 2));
+  camera.position.set(0, size.y * 0.55, distance * 1.35);
+  camera.lookAt(0, size.y * 0.55, 0);
+  
+}, undefined, (err) => console.error("GLB ERROR", err));
 
-// 7. RESPONSIVE SIZING
-window.addEventListener('resize', () => {
-    camera.aspect = container.clientWidth / container.clientHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(container.clientWidth, container.clientHeight);
-});
-
-const clock = new THREE.Clock();
+// 5. ANIMATION LOOP
 function animate() {
-    requestAnimationFrame(animate);
-    if (mixer) mixer.update(clock.getDelta());
-    controls.update();
-    renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+  const delta = clock.getDelta();
+  if (mixer) mixer.update(delta);
+  renderer.render(scene, camera);
 }
 animate();
 
-// 8. CHAT INTEGRATION
-window.sendMessage = async function() {
-    const input = document.getElementById("user-input");
-    const status = document.getElementById("status-text");
-    if (!input.value) return;
+// 6. CHAT FUNCTION
+window.askQuestion = async function () {
+  const questionInput = document.getElementById("question");
+  const answerDiv = document.getElementById("answer");
+  if (!questionInput.value) return;
 
-    status.innerText = "Thinking...";
-    const question = input.value;
-    input.value = "";
-
-    try {
-        const res = await fetch("https://ambedkar-api.onrender.com/chat", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text: question })
-        });
-        const data = await res.json();
-        status.innerText = "";
-        
-        // Browser Native Speech
-        const utterance = new SpeechSynthesisUtterance(data.response);
-        utterance.lang = "en-IN";
-        window.speechSynthesis.speak(utterance);
-    } catch (e) {
-        status.innerText = "Connection failed.";
-    }
+  answerDiv.innerText = "Thinking...";
+  try {
+    const response = await fetch("https://ambedkar-api.onrender.com/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: questionInput.value })
+    });
+    const data = await response.json();
+    answerDiv.innerText = data.response;
+    
+    // Voice
+    const utterance = new SpeechSynthesisUtterance(data.response);
+    utterance.lang = "en-IN";
+    utterance.onstart = () => { if (talkingAction) talkingAction.reset().play(); };
+    utterance.onend = () => { if (talkingAction) talkingAction.fadeOut(0.5); };
+    synth.speak(utterance);
+    
+    questionInput.value = "";
+  } catch (err) {
+    answerDiv.innerText = "Connection failed.";
+  }
 };
