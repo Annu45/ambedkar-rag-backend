@@ -11,7 +11,7 @@ camera.position.set(0, 1.4, 3.5);
 
 const container = document.getElementById('canvas-container');
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(container.clientWidth, container.clientHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 container.appendChild(renderer.domElement);
 
@@ -21,11 +21,10 @@ const dirLight = new THREE.DirectionalLight(0xffffff, 2);
 dirLight.position.set(2, 2, 5);
 scene.add(dirLight);
 
-// 3. LOAD AVATAR
+// 3. LOAD AVATAR (MATCHING GITHUB FILENAME)
 const loader = new GLTFLoader();
 let mixer;
 
-// UPDATED PATH TO MATCH GITHUB FILENAME EXACTLY
 loader.load('./models/Dr_ambedkar2.glb', (gltf) => {
     const avatar = gltf.scene;
     avatar.scale.set(1.1, 1.1, 1.1);
@@ -56,9 +55,9 @@ animate();
 
 // 5. WINDOW RESIZE
 window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(container.clientWidth, container.clientHeight);
 });
 
 // 6. CHAT LOGIC
