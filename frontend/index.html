@@ -14,7 +14,7 @@
   </script>
 
   <style>
-   body {
+    body {
       margin: 0;
       background-color: #000;
       color: white;
@@ -36,6 +36,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 10;
     }
 
     .header h1 {
@@ -52,7 +53,7 @@
       gap: 30px;
       padding: 20px 40px;
       align-items: center;
-      margin-bottom: 120px; /* Space for footer */
+      margin-bottom: 80px; /* Space for the fixed chat bar */
     }
 
     /* LEFT TEXT PANEL */
@@ -90,13 +91,14 @@
     .chat-bar {
       display: flex;
       gap: 10px;
-      padding: 15px;
+      padding: 15px 40px;
       background: rgba(0,0,0,0.8);
       position: fixed;
-      bottom: 70px; /* Above the team footer */
+      bottom: 60px; /* Sits above the team footer */
       left: 0;
       right: 0;
       border-top: 1px solid rgba(255,255,255,0.1);
+      z-index: 20;
     }
 
     .chat-bar input {
@@ -111,7 +113,7 @@
     }
 
     .chat-bar button {
-      padding: 14px 20px;
+      padding: 14px 24px;
       font-size: 16px;
       border-radius: 8px;
       border: none;
@@ -119,49 +121,66 @@
       background: #2c2b2b;
       color: #a29f9f;
       font-weight: bold;
+      transition: background 0.3s;
     }
 
-    /* PROFESSIONAL TEAM FOOTER */
+    .chat-bar button:hover {
+      background: #3d3c3c;
+    }
+
+    /* TEAM FOOTER SECTION */
     .team-footer {
       position: fixed;
       bottom: 0;
       left: 0;
       width: 100%;
       background: rgba(0, 0, 0, 0.95);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
       padding: 10px 0;
-      z-index: 1000;
+      z-index: 30;
+    }
+
+    .team-title {
+      color: #555;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-align: center;
+      margin-bottom: 6px;
+      font-weight: bold;
     }
 
     .team-grid {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 5px 15px;
-      max-width: 1200px;
+      gap: 4px 15px;
+      max-width: 1400px;
       margin: 0 auto;
       padding: 0 20px;
     }
 
     .team-grid span {
-      color: #888;
+      color: #777;
       font-size: 11px;
       white-space: nowrap;
     }
 
-    /* MOBILE */
+    /* MOBILE ADJUSTMENTS */
     @media (max-width: 900px) {
       .main {
         grid-template-columns: 1fr;
         text-align: center;
-        margin-bottom: 200px;
+        padding-bottom: 200px;
       }
       .answer { margin: auto; }
       .header { width: 90%; }
+      .chat-bar { bottom: 100px; }
     }
   </style>
 </head>
 <body>
+  
   <header>
     <div class="header">
       <h1>Dr. B. R. Ambedkar AI Avatar</h1>
@@ -191,6 +210,7 @@
   </footer>
 
   <div class="team-footer">
+    <div class="team-title">Project Team</div>
     <div class="team-grid">
       <span>Shristi Muskan (2023BITE003)</span>
       <span>Bhumika Joshi (2023BITE001)</span>
