@@ -1,57 +1,66 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js'; // NEW IMPORT
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const container = document.getElementById('canvas-container');
 
 // 1. SCENE SETUP
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000); 
 
-const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(0, 1.4, 3.5);
+// 2. CAMERA FOCUS (Original Side Position)
+const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+camera.position.set(0, 1.4, 3.8); 
 
-const container = document.getElementById('canvas-container');
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setSize(container.clientWidth, container.clientHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 container.appendChild(renderer.domElement);
 
-// 2. LIGHTING
+// 3. LIGHTING
 scene.add(new THREE.AmbientLight(0xffffff, 1.5));
-const dirLight = new THREE.DirectionalLight(0xffffff, 2);
+const dirLight = new THREE.DirectionalLight(0xffffff, 2.3);
 dirLight.position.set(2, 2, 5);
 scene.add(dirLight);
 
-// 3. DRACO & GLTF LOADER SETUP (This fixes the error)
+// 4. DRACO LOADER SETUP (Crucial for loading Dr_ambedkar2.glb)
 const dracoLoader = new DRACOLoader();
-// Use Google's hosted decoder so you don't have to upload more files
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
 
 const loader = new GLTFLoader();
-loader.setDRACOLoader(dracoLoader); // Connect Draco to GLTF
+loader.setDRACOLoader(dracoLoader);
 
 let mixer;
 
-// Loading the model with the confirmed filename
+// 5. LOAD THE MODEL
 loader.load('./models/Dr_ambedkar2.glb', (gltf) => {
     const avatar = gltf.scene;
-    avatar.scale.set(1.1, 1.1, 1.1);
-    avatar.position.set(0, -1, 0);
+    avatar.scale.set(1.15, 1.15, 1.15);
+    avatar.position.set(0, -1, 0); 
     scene.add(avatar);
 
     if (gltf.animations.length > 0) {
         mixer = new THREE.AnimationMixer(avatar);
         mixer.clipAction(gltf.animations[0]).play();
     }
-    console.log("✅ Avatar loaded with Draco support!");
 }, undefined, (error) => {
     console.error('Error loading avatar:', error);
 });
 
-// 4. ANIMATION & CONTROLS
+// 6. CONTROLS (Center on Avatar)
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.enablePan = false;
+controls.target.set(0, 1.2, 0); // Focuses on the face
+controls.update();
+
+// 7. RESPONSIVE SIZING
+window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+});
 
 const clock = new THREE.Clock();
 function animate() {
@@ -62,14 +71,7 @@ function animate() {
 }
 animate();
 
-// 5. WINDOW RESIZE
-window.addEventListener('resize', () => {
-    camera.aspect = container.clientWidth / container.clientHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(container.clientWidth, container.clientHeight);
-});
-
-// 6. CHAT LOGIC
+// 8. CHAT INTEGRATION
 window.sendMessage = async function() {
     const input = document.getElementById("user-input");
     const status = document.getElementById("status-text");
@@ -87,14 +89,12 @@ window.sendMessage = async function() {
         });
         const data = await res.json();
         status.innerText = "";
-        speakText(data.response);
+        
+        // Browser Native Speech
+        const utterance = new SpeechSynthesisUtterance(data.response);
+        utterance.lang = "en-IN";
+        window.speechSynthesis.speak(utterance);
     } catch (e) {
-        status.innerText = "Offline.";
+        status.innerText = "Connection failed.";
     }
 };
-
-function speakText(text) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-IN";
-    window.speechSynthesis.speak(utterance);
-}

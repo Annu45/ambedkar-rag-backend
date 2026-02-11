@@ -7,7 +7,7 @@
     <style>
         body { margin: 0; padding: 0; overflow: hidden; background-color: #000; color: white; font-family: 'Segoe UI', sans-serif; }
         
-        /* AVATAR ON THE RIGHT */
+        /* 3D AVATAR CONTAINER ON THE RIGHT */
         #canvas-container { 
             position: absolute; top: 0; right: 0; 
             width: 50%; height: 100%; z-index: 1; 
@@ -20,7 +20,7 @@
             border: 1px solid rgba(255,255,255,0.2);
         }
 
-        /* CHAT ON THE LEFT */
+        /* CHAT INPUT ON THE LEFT SIDE */
         .chat-container {
             position: absolute; bottom: 120px; left: 5%;
             width: 40%; z-index: 10; display: flex; gap: 10px;
@@ -42,7 +42,7 @@
             max-width: 400px;
         }
 
-        /* PROFESSIONAL TEAM FOOTER */
+        /* PROFESSIONAL TEAM FOOTER (ALL NAMES VISIBLE) */
         .team-footer {
             position: fixed; bottom: 0; left: 0; width: 100%;
             background: rgba(0, 0, 0, 0.9); border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -67,6 +67,7 @@
         <input type="text" id="user-input" placeholder="Ask Dr. B. R. Ambedkar...">
         <button onclick="sendMessage()">Ask</button>
     </div>
+
     <div class="team-footer">
         <div class="team-header">Project Team</div>
         <div class="team-grid">
@@ -87,6 +88,7 @@
             <span>Abhay Kumar (2023BITE023)</span>
         </div>
     </div>
+
     <script type="importmap">
         {
             "imports": {
