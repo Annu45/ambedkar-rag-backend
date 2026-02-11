@@ -5,3 +5,4 @@ langchain
 langchain-community
 rank_bm25
 requests
+gTTS
