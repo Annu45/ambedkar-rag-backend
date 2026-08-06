@@ -1,53 +1,78 @@
-# LLM Ambedkar 🤖🕊️  
-**Dr. B. R. Ambedkar RAG Backend + Voice API**
+# LLM Ambedkar 🤖🕊️
+**Dr. B. R. Ambedkar RAG Backend + 3D Talking Avatar**
 
-LLM Ambedkar is a Retrieval-Augmented Generation (RAG) based AI system that answers questions about Dr. B. R. Ambedkar and generates spoken responses in `.wav` format.  
-It is designed to work with Unreal Engine, Three.js, or any web/frontend client for building an interactive AI avatar.
+LLM Ambedkar is a Retrieval-Augmented Generation (RAG) chatbot that answers questions in the voice and persona of Dr. B. R. Ambedkar, grounded in his actual speeches and essays. It's served through a FastAPI backend and a Three.js-based web frontend with a 3D avatar.
+
+Part of a DIAT internship project under the supervision of Prof. CRS Kumar.
+
+**Live demo:** https://ambedkar-rag-backend.vercel.app/
 
 ---
 
 ## 🚀 Features
 
-- 📚 RAG Pipeline using Qdrant Vector Database  
-- 🧠 Context-aware answers from Ambedkar documents  
-- 🔊 Automatic `.wav` audio generation using Text-to-Speech  
-- 🌐 REST API using FastAPI  
-- 🎮 Ready to integrate with Unreal Engine & Web Frontends  
+- 📚 Context-grounded answers using **BM25 keyword retrieval** over Ambedkar's speeches and essays
+- 🧠 Persona-scoped generation via Google Gemini, with prompt-level guardrails that keep answers on-topic (Constitution, law, caste, his life) and refuse unrelated questions
+- 🔑 Multi-key API fallback with dynamic model discovery and 429 rate-limit handling
+- 🗣️ Two text-to-speech paths: server-side audio generation (gTTS) and, on the web frontend, the browser's built-in Web Speech API (see [Known gaps](#-known-gaps--roadmap))
+- 📝 Interaction logging to MongoDB (question, answer, timestamp)
+- 🌐 REST API via FastAPI, with Swagger docs at `/docs`
+- 🎮 3D avatar (Three.js + GLTF/DRACO) that animates while speaking
+- 🧩 A working, verified semantic (vector) search pipeline — Gemini embeddings + Qdrant — tested end-to-end via `semantic_search.py`, ready to be wired into the live retrieval path (see below)
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Architecture (as currently deployed)
 
-Frontend / Unreal Engine
-↓
-FastAPI (/ask)
-↓
-RAG
-(Qdrant + Gemini)
-↓
-Answer Generation
-↓
-TTS (.wav audio)
-↓
-audio_url returned
+```
+Frontend (Three.js avatar, hosted separately)
+        │  POST /ask  { question }
+        ▼
+FastAPI (api.py)
+        │
+        ▼
+rag.py → BM25Retriever over prepared_chunks.json (top-3 chunks)
+        │
+        ▼
+Persona prompt + retrieved context → Gemini generateContent
+        │
+        ├──► MongoDB (logs question/answer/timestamp, if configured)
+        └──► gTTS → .wav/.mp3 saved to /audio, URL returned in response
+        │
+        ▼
+JSON response { answer, audio_url } → frontend
+        │
+        ▼
+Browser speaks the answer via Web Speech API and animates the avatar
+```
 
+**Retrieval note:** the live `/ask` endpoint uses **BM25** (sparse/keyword search) over locally-loaded chunks — not a vector database. A semantic-search pipeline also exists and is **verified working**: `embed_and_index.py` embeds every chunk with Gemini's `gemini-embedding-001` model (3072-dim) and uploads them to a Qdrant collection, and `semantic_search.py` queries that collection end-to-end — tested and returning correct, relevant matches. It isn't wired into `rag.py`'s live endpoint yet, so production requests are still served by BM25. See [Known gaps](#-known-gaps--roadmap).
 
 ---
 
 ## 📁 Project Structure
 
+```
 Dr.Ambedkar-Rag/
 │
-├── api.py # FastAPI server
-├── rag.py # RAG logic
-├── chunks.py # Text chunking
-├── embed_and_index.py # Embedding + upload to Qdrant
-├── create_qdrant_db.py # Create Qdrant collection
-├── requirements.txt # Python dependencies
-├── audio/ # Generated .wav files
-├── data/ # Source documents
-└── .env # API keys
-
+├── api.py                 # FastAPI server — /ask endpoint, TTS, CORS, static audio hosting
+├── rag.py                 # Live RAG logic: BM25 retrieval + Gemini generation + Mongo logging
+├── chunks.py               # Splits data/ text files into overlapping chunks → prepared_chunks.json
+├── create_qdrant_db.py     # Legacy/superseded — embed_and_index.py now creates its own collection
+├── embed_and_index.py      # Embeds chunks with gemini-embedding-001 (3072-dim) and uploads to Qdrant
+├── semantic_search.py      # Standalone, verified semantic search over the Qdrant collection
+├── list_embedding_models.py # Utility: lists embedding-capable Gemini models for your API key
+├── list_models_stable.py   # Utility: lists Gemini chat models available to your API key
+├── check_models.py         # Utility: brute-force tests known Gemini model names against your key
+├── data/                   # Source .txt files — Ambedkar's speeches and essays
+├── data_manifest.json      # Per-file metadata (author, year, category) used during chunking
+├── prepared_chunks.json    # Output of chunks.py — what rag.py actually loads at runtime
+├── requirements.txt        # Python dependencies
+├── vercel.json             # Optional serverless deployment config (not the currently live deployment)
+├── audio/                  # Generated speech files (created at runtime)
+├── frontend/                # Three.js web client + 3D avatar model
+└── .env                    # API keys and connection strings (not committed)
+```
 
 ---
 
@@ -57,69 +82,119 @@ Create and activate a virtual environment:
 
 ```bash
 python -m venv env
-env\Scripts\activate
+env\Scripts\activate      # Windows
+source env/bin/activate   # macOS/Linux
+```
+
 Install dependencies:
 
+```bash
 pip install -r requirements.txt
+```
 
+## 🔑 Set API Keys
 
-🧩 Prepare the Database (Run Once)
-Run these commands in order to create database:
+Create a `.env` file in the root directory:
 
-python create_qdrant_db.py
-python chunks.py
-python embed_and_index.py
+```
+GEMINI_API_KEY=YOUR_GEMINI_API_KEY        # comma-separate multiple keys for automatic fallback
+MONGO_URI=YOUR_MONGODB_CONNECTION_STRING  # optional — logging is skipped if unset
 
-
-🔑 Set API Keys
-Create a .env file in the root directory:
-GEMINI_API_KEY=YOUR_GEMINI_API_KEY
+# Only needed if you're using the optional vector-search pipeline below
+QDRANT_URL=YOUR_QDRANT_URL
 QDRANT_API_KEY=YOUR_QDRANT_API_KEY
-QDRANT_URL=http://localhost:6333
+```
 
+## 🧩 Prepare the Retrieval Data (run once)
 
+```bash
+python chunks.py
+```
 
+This reads every file in `data/`, splits it into overlapping 400-word chunks (100-word overlap), attaches metadata from `data_manifest.json`, and writes `prepared_chunks.json` — the file `rag.py` loads at startup for BM25 retrieval. This is the only data-prep step required for the app to run.
+
+### Optional: build and query the vector-search pipeline
+
+These scripts set up and test semantic search over the same chunks. They're **verified working end-to-end**, but not yet called by `rag.py`'s live endpoint:
+
+```bash
+python list_embedding_models.py  # confirms which embedding model your API key supports
+python embed_and_index.py        # embeds all chunks with gemini-embedding-001 (3072-dim) and (re)creates
+                                  # the "ambedkar_speeches" Qdrant collection — takes ~45 min (274 chunks,
+                                  # rate-limited to one request per ~10s)
+python semantic_search.py        # queries that collection — prompts for a question, prints top-3
+                                  # matches with similarity scores
+```
+
+⚠️ `create_qdrant_db.py` is now legacy — `embed_and_index.py` creates/recreates its own collection, so `create_qdrant_db.py`'s separate 384-dim collection is unused. Safe to remove once confirmed.
+
+Note: Google retired the older `embedding-001` model; `embed_and_index.py` and `semantic_search.py` both use its replacement, `gemini-embedding-001`, and must stay in sync on model name and vector size if either changes.
+
+## ▶️ Run the Backend
+
+```bash
 uvicorn api:app --reload
-Backend will run at:
+```
 
+Backend runs at `http://127.0.0.1:8000`. On startup you should see BM25 initialization logs and `Uvicorn running on http://127.0.0.1:8000`.
 
+## 🧪 API Testing (Thunder Client / Postman)
 
-http://127.0.0.1:8000
-You should see:
+**Endpoint:** `POST http://127.0.0.1:8000/ask`
 
-API loaded
-RAG loaded
-Uvicorn running on http://127.0.0.1:8000
-🧪 API Testing (Thunder Client / Postman)
-Endpoint
-POST http://127.0.0.1:8000/ask
-Headers
-Content-Type: application/json
-Body (JSON)
+**Headers:** `Content-Type: application/json`
+
+**Body:**
+```json
 {
   "question": "Who was Dr. B. R. Ambedkar?"
 }
-Response Example
+```
+
+**Response:**
+```json
 {
-  "question": "Who was Dr. B. R. Ambedkar?",
   "answer": "Dr. B. R. Ambedkar was a social reformer...",
-  "audio_url": "http://127.0.0.1:8000/audio/abcd1234.wav"
+  "audio_url": "/audio/abcd1234.mp3"
 }
-Open the audio_url in your browser → the .wav file will play.
+```
 
+`audio_url` is a gTTS-generated file served from the backend; the current web frontend does not play it (see below) but it's available for other clients (e.g. an Unreal Engine integration).
 
+## 🌐 API Documentation
 
-🌐 API Documentation
-Swagger UI:
+Swagger UI: `http://127.0.0.1:8000/docs`
 
-http://127.0.0.1:8000/docs
-✨ Final Pipeline
+## 🖥️ Frontend
+
+The `frontend/` folder is a static Three.js app (no build step). It:
+- Loads a `.glb` 3D model of Dr. Ambedkar and animates a "talking" clip while speech is playing
+- Prompts for a username on first load (stored in `sessionStorage`) and tags it onto each question sent to the backend
+- Fetches from the live API at `https://ambedkar-api.onrender.com/ask` (hardcoded in `script.js`) — update this if you deploy your own backend
+- Uses the **browser's Web Speech API** to speak answers aloud (not the backend's gTTS audio)
+
+---
+
+## 📌 Known gaps / roadmap
+
+- **Retrieval:** wire `semantic_search.py`'s query logic into `rag.py` for hybrid retrieval (BM25 + Qdrant vector search), now that the vector pipeline is verified working end-to-end.
+- **Audio:** wire the frontend to play the backend's `audio_url` (or drop gTTS server-side generation if the Web Speech API path is the intended long-term approach) so there's a single source of truth for speech.
+- **Deployment:** the site (frontend) is deployed on Vercel at [ambedkar-rag-backend.vercel.app](https://ambedkar-rag-backend.vercel.app/), while the API backend runs separately on Render. `vercel.json` still configures `api.py` to also run as a Vercel serverless function — this was likely an earlier attempt to host the backend on Vercel too, probably moved to Render because Vercel's serverless functions have an ephemeral filesystem, which doesn't suit writing and re-serving generated `.mp3` files from `audio/`. Worth removing `vercel.json` if it's confirmed unused, to avoid confusing future readers.
+
+---
+
+## ✨ Pipeline Summary
+
+```
 User Question
    ↓
 FastAPI (/ask)
    ↓
-RAG Answer
+BM25 retrieval over prepared_chunks.json
    ↓
-.wav Voice Generation
+Gemini generation (persona-scoped prompt, multi-key fallback)
    ↓
-Frontend / Unreal Avatar speaks
+MongoDB logging (if configured) + gTTS audio generation
+   ↓
+JSON response → Frontend speaks via Web Speech API, avatar animates
+```

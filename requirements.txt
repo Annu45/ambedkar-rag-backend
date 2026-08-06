@@ -8,3 +8,5 @@ requests
 gTTS
 pymongo==4.6.1
 certifi
+qdrant-client
+google-generativeai
