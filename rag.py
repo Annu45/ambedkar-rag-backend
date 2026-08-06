@@ -10,6 +10,8 @@ from pymongo import MongoClient
 # --- LIBRARIES ---
 from langchain_community.retrievers import BM25Retriever
 from langchain_core.documents import Document
+import google.generativeai as genai
+from qdrant_client import QdrantClient
 
 load_dotenv()
 
@@ -30,7 +32,7 @@ if MONGO_URI:
 # --- CONFIGURATION ---
 DATA_FILE = "prepared_chunks.json"
 
-# --- 1. INITIALIZE SEARCH (BM25) ---
+# --- 1. INITIALIZE SEARCH (BM25) — this is the primary retrieval method ---
 print("⚙️ Initializing Keyword Search (BM25)...")
 
 if not os.path.exists(DATA_FILE):
@@ -44,6 +46,63 @@ retriever = BM25Retriever.from_documents(documents)
 retriever.k = 3
 
 print(f"✅ Search Engine Ready! Loaded {len(documents)} documents.")
+
+# --- 1b. INITIALIZE SEMANTIC SEARCH (Qdrant) — fallback only, used if BM25 finds nothing ---
+GEMINI_API_KEYS = [k.strip() for k in os.getenv("GEMINI_API_KEY", "").split(",") if k.strip()]
+QDRANT_URL = os.getenv("QDRANT_URL")
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+QDRANT_COLLECTION = "ambedkar_speeches"
+EMBED_MODEL = "models/gemini-embedding-001"
+
+qdrant_client = None
+if QDRANT_URL and QDRANT_API_KEY:
+    try:
+        qdrant_client = QdrantClient(url=QDRANT_URL, api_key=QDRANT_API_KEY, timeout=5)
+        print("✅ Qdrant client connected — semantic search available as fallback.")
+    except Exception as e:
+        print(f"⚠️ Qdrant connection failed, no fallback available: {e}")
+        qdrant_client = None
+else:
+    print("ℹ️ QDRANT_URL/QDRANT_API_KEY not set — BM25 only, no fallback.")
+
+
+def embed_query_for_retrieval(question):
+    """Try each available Gemini key to embed the query. Returns None on total failure."""
+    for key in GEMINI_API_KEYS:
+        try:
+            genai.configure(api_key=key)
+            result = genai.embed_content(
+                model=EMBED_MODEL,
+                content=question,
+                task_type="retrieval_query",
+            )
+            return result["embedding"]
+        except Exception:
+            continue
+    return None
+
+
+def semantic_retrieve(question, top_k=3):
+    """Qdrant semantic search — only called when BM25 returns nothing. Returns a list of
+    matched texts, or None if unavailable/failed."""
+    if qdrant_client is None:
+        return None
+    try:
+        query_embedding = embed_query_for_retrieval(question)
+        if query_embedding is None:
+            return None
+
+        response = qdrant_client.query_points(
+            collection_name=QDRANT_COLLECTION,
+            query=query_embedding,
+            limit=top_k,
+        )
+        hits = response.points
+        texts = [hit.payload.get("text", "") for hit in hits if hit.payload.get("text")]
+        return texts if texts else None
+    except Exception as e:
+        print(f"   ⚠️ Semantic fallback also failed ({e}).")
+        return None
 
 # --- 2. DYNAMIC MODEL FINDER ---
 def get_available_model(api_key):
@@ -70,14 +129,22 @@ def get_available_model(api_key):
 # --- UPDATED ANSWER FUNCTION ---
 def answer_question(question):
     print(f"\n🔍 Analyzing: {question}")
-    
-    # Search
+
+    # --- HYBRID RETRIEVAL: BM25 first (primary), Qdrant semantic search only as fallback ---
     results = retriever.invoke(question)
-    
-    # If no results, we don't return immediately; 
-    # we let the prompt decide if it's a constitutional topic.
-    context_text = "\n\n".join([doc.page_content for doc in results]) if results else "No specific documents found."
-    
+    if results:
+        print("   🔎 Retrieval: BM25 keyword search")
+        context_text = "\n\n".join([doc.page_content for doc in results])
+    else:
+        print("   🔎 BM25 found nothing — trying Qdrant semantic search (fallback)")
+        semantic_results = semantic_retrieve(question)
+        if semantic_results:
+            print("   🔎 Retrieval: Qdrant semantic search (fallback)")
+            context_text = "\n\n".join(semantic_results)
+        else:
+            print("   🔎 Retrieval: no results from either method")
+            context_text = "No specific documents found."
+
     prompt_text = f"""
     You are Dr. B. R. Ambedkar, the architect of the Indian Constitution.
     
