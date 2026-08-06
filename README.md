@@ -18,7 +18,7 @@ Part of a DIAT internship project under the supervision of Prof. CRS Kumar.
 - 📝 Interaction logging to MongoDB (question, answer, timestamp)
 - 🌐 REST API via FastAPI, with Swagger docs at `/docs`
 - 🎮 3D avatar (Three.js + GLTF/DRACO) that animates while speaking
-- 🧩 Hybrid retrieval: **BM25 keyword search is primary**, with a verified Qdrant + Gemini-embeddings semantic search as an automatic fallback if BM25 returns nothing
+- 🧩 **Fallback retrieval**: BM25 keyword search is primary, with a verified Qdrant + Gemini-embeddings semantic search as an automatic fallback if BM25 returns nothing (BM25-first, not merged/hybrid — see note below)
 
 ---
 
@@ -32,7 +32,8 @@ FastAPI (api.py)
         │
         ▼
 rag.py → BM25Retriever over prepared_chunks.json (top-3 chunks, primary)
-        │  (falls back to Qdrant semantic search only if BM25 returns nothing)
+        │  (Qdrant semantic search runs only as a fallback if BM25 returns nothing —
+        │   fallback retrieval, not merged/hybrid)
         ▼
 Persona prompt + retrieved context → Gemini generateContent
         │
@@ -46,7 +47,7 @@ JSON response { answer, audio_url } → frontend
 Browser speaks the answer via Web Speech API and animates the avatar
 ```
 
-**Retrieval note:** the live `/ask` endpoint uses **BM25** (sparse/keyword search) as the primary retrieval method — chosen because its answers tested more useful for this corpus. A verified semantic-search path (`embed_and_index.py` embeds every chunk with Gemini's `gemini-embedding-001` model, 3072-dim, into a Qdrant collection) is wired into `rag.py` as an **automatic fallback**, used only if BM25 returns no results. In practice BM25 almost always returns its top-k regardless of relevance score, so the fallback rarely triggers — it exists as a safety net rather than the everyday path. `semantic_search.py` remains available as a standalone script for testing the Qdrant path directly. See [Known gaps](#-known-gaps--roadmap).
+**Retrieval note:** the live `/ask` endpoint uses **BM25** (sparse/keyword search) as the primary retrieval method — chosen because its answers tested more useful for this corpus. A verified semantic-search path (`embed_and_index.py` embeds every chunk with Gemini's `gemini-embedding-001` model, 3072-dim, into a Qdrant collection) is wired into `rag.py` as an **automatic fallback**, used only if BM25 returns no results. This is **fallback retrieval, not true hybrid retrieval** — the two methods' results are never merged or reranked together; BM25 runs first and Qdrant is only consulted if it comes back empty. In practice BM25 almost always returns its top-k regardless of relevance score, so the fallback rarely triggers — it exists as a safety net rather than the everyday path. `semantic_search.py` remains available as a standalone script for testing the Qdrant path directly. See [Known gaps](#-known-gaps--roadmap).
 
 ---
 
@@ -56,7 +57,7 @@ Browser speaks the answer via Web Speech API and animates the avatar
 Dr.Ambedkar-Rag/
 │
 ├── api.py                 # FastAPI server — /ask endpoint, TTS, CORS, static audio hosting
-├── rag.py                 # Live RAG logic: BM25 (primary) + Qdrant semantic search (fallback) + Gemini generation + Mongo logging
+├── rag.py                 # Live RAG logic: BM25 (primary) with Qdrant semantic search as fallback retrieval + Gemini generation + Mongo logging
 ├── chunks.py               # Splits data/ text files into overlapping chunks → prepared_chunks.json
 ├── create_qdrant_db.py     # Legacy/superseded — embed_and_index.py now creates its own collection
 ├── embed_and_index.py      # Embeds chunks with gemini-embedding-001 (3072-dim) and uploads to Qdrant
@@ -177,7 +178,7 @@ The `frontend/` folder is a static Three.js app (no build step). It:
 
 ## 📌 Known gaps / roadmap
 
-- **Retrieval:** BM25 is primary and Qdrant is wired in as a fallback, but since BM25 rarely returns empty, the fallback is mostly untested under real traffic — worth deliberately triggering it (e.g. an empty-corpus test) to confirm it behaves as expected.
+- **Retrieval:** BM25 is primary and Qdrant is wired in as a fallback (BM25-first, not merged/hybrid), but since BM25 rarely returns empty, the fallback is mostly untested under real traffic — worth deliberately triggering it (e.g. an empty-corpus test) to confirm it behaves as expected. A true hybrid (merging/reranking both methods' results together) would be a further step beyond this.
 - **Audio:** wire the frontend to play the backend's `audio_url` (or drop gTTS server-side generation if the Web Speech API path is the intended long-term approach) so there's a single source of truth for speech.
 - **Deployment:** the site (frontend) is deployed on Vercel at [ambedkar-rag-backend.vercel.app](https://ambedkar-rag-backend.vercel.app/), while the API backend runs separately on Render. `vercel.json` still configures `api.py` to also run as a Vercel serverless function — this was likely an earlier attempt to host the backend on Vercel too, probably moved to Render because Vercel's serverless functions have an ephemeral filesystem, which doesn't suit writing and re-serving generated `.mp3` files from `audio/`. Worth removing `vercel.json` if it's confirmed unused, to avoid confusing future readers.
 
@@ -190,7 +191,7 @@ User Question
    ↓
 FastAPI (/ask)
    ↓
-BM25 retrieval over prepared_chunks.json (primary; Qdrant semantic search as fallback)
+BM25 retrieval over prepared_chunks.json (primary; Qdrant semantic search as fallback, not merged)
    ↓
 Gemini generation (persona-scoped prompt, multi-key fallback)
    ↓
