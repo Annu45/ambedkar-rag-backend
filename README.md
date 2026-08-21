@@ -1,4 +1,4 @@
-# LLM Ambedkar 🤖🕊️
+# LLM Ambedkar 
 **Dr. B. R. Ambedkar RAG Backend + 3D Talking Avatar**
 
 LLM Ambedkar is a Retrieval-Augmented Generation (RAG) chatbot that answers questions in the voice and persona of Dr. B. R. Ambedkar, grounded in his actual speeches and essays. It's served through a FastAPI backend and a Three.js-based web frontend with a 3D avatar.
@@ -9,20 +9,20 @@ Part of a DIAT internship project under the supervision of Prof. CRS Kumar.
 
 ---
 
-## 🚀 Features
+## Features
 
-- 📚 Context-grounded answers using **BM25 keyword retrieval** over Ambedkar's speeches and essays
-- 🧠 Persona-scoped generation via Google Gemini, with prompt-level guardrails that keep answers on-topic (Constitution, law, caste, his life) and refuse unrelated questions
-- 🔑 Multi-key API fallback with dynamic model discovery and 429 rate-limit handling
-- 🗣️ Two text-to-speech paths: server-side audio generation (gTTS) and, on the web frontend, the browser's built-in Web Speech API (see [Known gaps](#-known-gaps--roadmap))
-- 📝 Interaction logging to MongoDB (question, answer, timestamp)
-- 🌐 REST API via FastAPI, with Swagger docs at `/docs`
-- 🎮 3D avatar (Three.js + GLTF/DRACO) that animates while speaking
-- 🧩 **Fallback retrieval**: BM25 keyword search is primary, with a verified Qdrant + Gemini-embeddings semantic search as an automatic fallback if BM25 returns nothing (BM25-first, not merged/hybrid — see note below)
+-  Context-grounded answers using **BM25 keyword retrieval** over Ambedkar's speeches and essays
+- Persona-scoped generation via Google Gemini, with prompt-level guardrails that keep answers on-topic (Constitution, law, caste, his life) and refuse unrelated questions
+- Multi-key API fallback with dynamic model discovery and 429 rate-limit handling
+- Two text-to-speech paths: server-side audio generation (gTTS) and, on the web frontend, the browser's built-in Web Speech API (see [Known gaps](#-known-gaps--roadmap))
+- Interaction logging to MongoDB (question, answer, timestamp)
+- REST API via FastAPI, with Swagger docs at `/docs`
+- 3D avatar (Three.js + GLTF/DRACO) that animates while speaking
+- **Fallback retrieval**: BM25 keyword search is primary, with a verified Qdrant + Gemini-embeddings semantic search as an automatic fallback if BM25 returns nothing (BM25-first, not merged/hybrid — see note below)
 
 ---
 
-## 🏗️ Architecture (as currently deployed)
+##  Architecture (as currently deployed)
 
 ```
 Frontend (Three.js avatar, hosted separately)
@@ -77,7 +77,7 @@ Dr.Ambedkar-Rag/
 
 ---
 
-## ⚙️ Installation
+## Installation
 
 Create and activate a virtual environment:
 
@@ -93,7 +93,7 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-## 🔑 Set API Keys
+## Set API Keys
 
 Create a `.env` file in the root directory:
 
@@ -106,7 +106,7 @@ QDRANT_URL=YOUR_QDRANT_URL
 QDRANT_API_KEY=YOUR_QDRANT_API_KEY
 ```
 
-## 🧩 Prepare the Retrieval Data (run once)
+## Prepare the Retrieval Data (run once)
 
 ```bash
 python chunks.py
@@ -127,11 +127,11 @@ python semantic_search.py        # queries that collection — prompts for a que
                                   # matches with similarity scores
 ```
 
-⚠️ `create_qdrant_db.py` is now legacy — `embed_and_index.py` creates/recreates its own collection, so `create_qdrant_db.py`'s separate 384-dim collection is unused. Safe to remove once confirmed.
+ `create_qdrant_db.py` is now legacy — `embed_and_index.py` creates/recreates its own collection, so `create_qdrant_db.py`'s separate 384-dim collection is unused. Safe to remove once confirmed.
 
 Note: Google retired the older `embedding-001` model; `embed_and_index.py` and `semantic_search.py` both use its replacement, `gemini-embedding-001`, and must stay in sync on model name and vector size if either changes.
 
-## ▶️ Run the Backend
+## Run the Backend
 
 ```bash
 uvicorn api:app --reload
@@ -139,7 +139,7 @@ uvicorn api:app --reload
 
 Backend runs at `http://127.0.0.1:8000`. On startup you should see BM25 initialization logs and `Uvicorn running on http://127.0.0.1:8000`.
 
-## 🧪 API Testing (Thunder Client / Postman)
+## API Testing (Thunder Client / Postman)
 
 **Endpoint:** `POST http://127.0.0.1:8000/ask`
 
@@ -162,11 +162,11 @@ Backend runs at `http://127.0.0.1:8000`. On startup you should see BM25 initiali
 
 `audio_url` is a gTTS-generated file served from the backend; the current web frontend does not play it (see below) but it's available for other clients (e.g. an Unreal Engine integration).
 
-## 🌐 API Documentation
+##  API Documentation
 
 Swagger UI: `http://127.0.0.1:8000/docs`
 
-## 🖥️ Frontend
+## Frontend
 
 The `frontend/` folder is a static Three.js app (no build step). It:
 - Loads a `.glb` 3D model of Dr. Ambedkar and animates a "talking" clip while speech is playing
@@ -176,7 +176,7 @@ The `frontend/` folder is a static Three.js app (no build step). It:
 
 ---
 
-## 📌 Known gaps / roadmap
+## Known gaps / roadmap
 
 - **Retrieval:** BM25 is primary and Qdrant is wired in as a fallback (BM25-first, not merged/hybrid), but since BM25 rarely returns empty, the fallback is mostly untested under real traffic — worth deliberately triggering it (e.g. an empty-corpus test) to confirm it behaves as expected. A true hybrid (merging/reranking both methods' results together) would be a further step beyond this.
 - **Audio:** wire the frontend to play the backend's `audio_url` (or drop gTTS server-side generation if the Web Speech API path is the intended long-term approach) so there's a single source of truth for speech.
@@ -184,7 +184,7 @@ The `frontend/` folder is a static Three.js app (no build step). It:
 
 ---
 
-## ✨ Pipeline Summary
+## Pipeline Summary
 
 ```
 User Question
